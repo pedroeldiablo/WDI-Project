@@ -3,6 +3,30 @@
 console.log("JS loaded!");
 
 $(function () {
+  var $mapDiv = $('#map');
+  console.log($mapDiv);
+
+  var map = new google.maps.Map($mapDiv[0], {
+    center: { lat: 51.5153, lng: -0.0722 },
+    zoom: 16
+  });
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var latLng = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+
+    map.panTo(latLng);
+
+    var marker = new google.maps.Marker({
+      position: latLng,
+      animation: google.maps.Animation.BOUNCE,
+      draggable: true,
+      map: map
+    });
+  });
+
   var $main = $('main');
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);

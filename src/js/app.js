@@ -1,6 +1,30 @@
 console.log("JS loaded!");
 
 $(() =>{
+  let $mapDiv =$('#map');
+  console.log($mapDiv);
+
+  let map = new google.maps.Map($mapDiv[0], {
+    center: { lat: 51.5153, lng: -0.0722 },
+    zoom: 16
+  });
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    let latLng = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+
+    map.panTo(latLng);
+
+    let marker = new google.maps.Marker({
+      position: latLng,
+      animation: google.maps.Animation.BOUNCE,
+      draggable: true,
+      map
+    });
+  });
+
   let $main = $('main');
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -189,4 +213,5 @@ $(() =>{
     localStorage.removeItem('token');
     showLoginForm();
   }
+
 });

@@ -1,35 +1,5 @@
-main {
-  margin-top: 30px;
-}
-
-.navbar {
-  margin: 0 0 30px;
-}
-
-.nav {
-  float: right;
-}
-
-nav button {
-  float: right;
-}
-
-.card img {
-  width: 100%;
-}
-
-@media(max-width:34em) {
-  nav {
-    position: relative;
-  }
-
-  .nav {
-    width: 100%;
-  }
-}
-
-
 #map{
   width: 100vw;
   height: 100vh;
+  background-color: red;
 }

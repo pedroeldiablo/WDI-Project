@@ -3,7 +3,10 @@ const babel    = require("gulp-babel");
 const cleanCSS = require("gulp-clean-css");
 const plumber  = require("gulp-plumber");
 
+const sass 		 	 = require('gulp-sass');
+const flatten		 = require('gulp-flatten');
 const nodemon    = require("gulp-nodemon");
+const livereload = require('gulp-livereload');
 
 const src  = "src";
 const dist = "public";
@@ -17,11 +20,14 @@ gulp.task("es6", () => {
 	.pipe(gulp.dest('public'));
 });
 
-gulp.task("minifyCSS", () => {
-	return gulp.src('src/**/*.css')
-	.pipe(plumber())
+gulp.task('sass', () => {
+	return gulp.src(`${src}/**/*.scss`)
+	.pipe(sass().on('error', sass.logError))
 	.pipe(cleanCSS({ compatibility: "ie8"}))
-	.pipe(gulp.dest('public'));
+	.pipe(plumber())
+	.pipe(flatten())
+	.pipe(gulp.dest(`${dist}/css/`))
+	.pipe(livereload());
 });
 
 gulp.task('nodemon', () => {
@@ -33,13 +39,14 @@ gulp.task('nodemon', () => {
 });
 
 gulp.task("watch", () => {
+	livereload.listen();
 	gulp.watch('src/**/*.js', ['es6']);
-	gulp.watch('src/**/*.css', ['minifyCSS']);
+	gulp.watch(`${src}/**/*.scss`, ['sass']);
 });
 
 gulp.task("default", [
 	'es6',
-	'minifyCSS',
+	'sass',
 	'watch',
 	'nodemon'
 ]);

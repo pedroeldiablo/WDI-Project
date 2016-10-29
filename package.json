@@ -9,7 +9,10 @@
     "express": "^4.14.0",
     "express-jwt": "^5.1.0",
     "gulp": "^3.9.1",
+    "gulp-flatten": "^0.3.1",
+    "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.2.1",
+    "gulp-sass": "^2.3.2",
     "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.4",
     "morgan": "^1.7.0"

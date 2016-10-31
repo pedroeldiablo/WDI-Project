@@ -33,7 +33,7 @@ $(() =>{
   $main.on('click', 'button.edit', getUser);
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
-  $('.sharksIndex').on('click', getSharks);
+  $('.eventsIndex').on('click', getEvents);
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
@@ -48,16 +48,10 @@ $(() =>{
       <h2>Register</h2>
       <form method="post" action="/register">
         <div class="form-group">
-          <input class="form-control" name="firstName" placeholder="First Name">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="lastName" placeholder="Last Name">
+          <input class="form-control" name="username" placeholder="Username">
         </div>
         <div class="form-group">
           <input class="form-control" name="email" placeholder="Email">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="age" placeholder="Age e.g 21">
         </div>
         <div class="form-group">
           <input class="form-control" type="password" name="password" placeholder="Password">
@@ -65,26 +59,10 @@ $(() =>{
         <div class="form-group">
           <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">
         </div>
-        <div class="form-group">
-          <input class="form-control" name="gender" placeholder="Male or Female?">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="postcode" placeholder="Postcode">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!">
-        </div>
-        <div class="form-group">
-          <input class="form-control" name="profilePic" placeholder="Upload your image here">
-        </div>
         <button class="btn btn-primary">Register</button>
       </form>
     `);
   }
-
   function showLoginForm() {
     if(event) event.preventDefault();
     $main.html(`
@@ -145,17 +123,17 @@ $(() =>{
     .fail(showLoginForm);
   }
 
-  function getSharks() {
+  function getEvents() {
     if(event) event.preventDefault();
     let token = localStorage.getItem('token');
     $.ajax({
-      url: '/sharks',
+      url: '/events',
       method: "GET",
       beforeSend: function(jqXHR) {
         if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
       }
     })
-    .done(showSharks)
+    .done(showEvents)
     .fail(showLoginForm);
   }
 
@@ -169,7 +147,7 @@ $(() =>{
           <div class="card">
             <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">
             <div class="card-block">
-              <h4 class="card-title">${user.firstName}</h4>
+              <h4 class="card-title">${user.username}</h4>
             </div>
           </div>
           <button class="btn btn-danger delete" data-id="${user._id}">Delete</button>
@@ -180,10 +158,10 @@ $(() =>{
     $main.html($row);
   }
 
-  function showSharks(sharks) {
-    console.log(sharks);
+  function showEvents(events) {
+    console.log(events);
     let $row = $('<div class="row"></div>');
-    sharks.forEach((shark) => {
+    events.forEach((event) => {
       $row.append(`
         <div class="col-md-4">
           <div class="card">
@@ -202,7 +180,7 @@ $(() =>{
     });
     $main.html($row);
   }
-  showSharks();
+  showEvents();
 
   function deleteUser() {
     let id = $(this).data('id');

@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 const router = require('./config/routes');
 
-let mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/sharks-api';
+let mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/events-api';
 
 mongoose.connect(mongoUri);
 

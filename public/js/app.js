@@ -35,7 +35,7 @@ $(function () {
   $main.on('click', 'button.edit', getUser);
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
-  $('.sharksIndex').on('click', getSharks);
+  $('.eventsIndex').on('click', getEvents);
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
@@ -46,9 +46,8 @@ $(function () {
   }
   function showRegisterForm() {
     if (event) event.preventDefault();
-    $main.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="firstName" placeholder="First Name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lastName" placeholder="Last Name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="Age e.g 21">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="gender" placeholder="Male or Female?">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="postcode" placeholder="Postcode">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="profilePic" placeholder="Upload your image here">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
+    $main.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="username" placeholder="Username">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
   }
-
   function showLoginForm() {
     if (event) event.preventDefault();
     $main.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
@@ -88,36 +87,36 @@ $(function () {
     }).done(showUsers).fail(showLoginForm);
   }
 
-  function getSharks() {
+  function getEvents() {
     if (event) event.preventDefault();
     var token = localStorage.getItem('token');
     $.ajax({
-      url: '/sharks',
+      url: '/events',
       method: "GET",
       beforeSend: function beforeSend(jqXHR) {
         if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
       }
-    }).done(showSharks).fail(showLoginForm);
+    }).done(showEvents).fail(showLoginForm);
   }
 
   function showUsers(users) {
     console.log(users);
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.firstName + '</h4>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + user._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + user._id + '">Edit</button>\n        </div>\n      ');
+      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.username + '</h4>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + user._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + user._id + '">Edit</button>\n        </div>\n      ');
     });
     $main.html($row);
   }
 
-  function showSharks(sharks) {
-    console.log(sharks);
+  function showEvents(events) {
+    console.log(events);
     var $row = $('<div class="row"></div>');
-    sharks.forEach(function (shark) {
+    events.forEach(function (event) {
       $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + shark.image + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + shark.species + '</h4>\n            </div>\n            <div class="card-block">\n              <h4 class="card-title">' + shark.maxLength + ' feet</h4>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + shark._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + shark._id + '">Edit</button>\n        </div>\n      ');
     });
     $main.html($row);
   }
-  showSharks();
+  showEvents();
 
   function deleteUser() {
     var id = $(this).data('id');

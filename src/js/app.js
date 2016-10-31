@@ -1,22 +1,17 @@
 console.log("JS loaded!");
-
 $(() =>{
   let $mapDiv =$('#map');
   console.log($mapDiv);
-
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
     zoom: 16
   });
-
   navigator.geolocation.getCurrentPosition(function(position) {
     let latLng = {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
     };
-
     map.panTo(latLng);
-
     let marker = new google.maps.Marker({
       position: latLng,
       animation: google.maps.Animation.BOUNCE,
@@ -24,7 +19,6 @@ $(() =>{
       map
     });
   });
-
   let $main = $('main');
   $('.register').on('click', showRegisterForm);
   $('.login').on('click', showLoginForm);
@@ -84,7 +78,6 @@ $(() =>{
       </form>
     `);
   }
-
   function showLoginForm() {
     if(event) event.preventDefault();
     $main.html(`
@@ -144,7 +137,6 @@ $(() =>{
     .done(showUsers)
     .fail(showLoginForm);
   }
-
   function getSharks() {
     if(event) event.preventDefault();
     let token = localStorage.getItem('token');
@@ -158,8 +150,6 @@ $(() =>{
     .done(showSharks)
     .fail(showLoginForm);
   }
-
-
   function showUsers(users) {
     console.log(users);
     let $row = $('<div class="row"></div>');
@@ -179,7 +169,6 @@ $(() =>{
     });
     $main.html($row);
   }
-
   function showSharks(sharks) {
     console.log(sharks);
     let $row = $('<div class="row"></div>');
@@ -203,7 +192,6 @@ $(() =>{
     $main.html($row);
   }
   showSharks();
-
   function deleteUser() {
     let id = $(this).data('id');
     let token = localStorage.getItem('token');
@@ -235,5 +223,4 @@ $(() =>{
     localStorage.removeItem('token');
     showLoginForm();
   }
-
 });

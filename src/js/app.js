@@ -5,13 +5,14 @@ $(() =>{
   createMap();
   getEvents();
 
-  function createMap() {
-    let $mapDiv =$('#map');
+  let $mapDiv =$('#map');
 
-    let map = new google.maps.Map($mapDiv[0], {
-      center: { lat: 51.5153, lng: -0.0722 },
-      zoom: 16
-    });
+  let map = new google.maps.Map($mapDiv[0], {
+    center: { lat: 51.5153, lng: -0.0722 },
+    zoom: 10
+  });
+
+  function createMap() {
 
     navigator.geolocation.getCurrentPosition(function(position) {
       let latLng = {
@@ -23,26 +24,44 @@ $(() =>{
 
       let marker = new google.maps.Marker({
         position: latLng,
-        animation: google.maps.Animation.BOUNCE,
+        animation: google.maps.Animation.DROP,
         draggable: true,
         map
       });
     });
   }
 
-  let searchReqs = "";
   function getEvents() {
     console.log('getting events');
     $.ajax({
-      url: `http://www.skiddle.com/api/v1/events/`,
+      url: `/events`,
       data: {
-        api_key: "19e3e956478924a5391be5b5e37fee57"
+        lat: 51.5,
+        lng: -0.2,
+        radius: 5,
+        limit: 100
       },
       method: "GET"
     }).done(function (data) {
-      console.log('done: data:', data);
+      console.log(data);
+      addEventMarkers(data);
     }).fail(function () {
-      console.log('Skiddle call failed: arguments:', arguments);
+      console.log('Skiddle call failed, arguments:', arguments);
+    });
+  }
+
+  function addEventMarkers(events) {
+    events.forEach((event) => {
+      let latLng =  {
+        lat: event.venue.latitude,
+        lng: event.venue.longitude
+      };
+      console.log(latLng);
+      let marker = new google.maps.Marker({
+        position: latLng,
+        animation: google.maps.Animation.DROP,
+        map
+      });
     });
   }
 
@@ -174,29 +193,6 @@ $(() =>{
   //   $main.html($row);
   // }
   //
-  // function showEvents(events) {
-  //   console.log(events);
-  //   let $row = $('<div class="row"></div>');
-  //   events.forEach((event) => {
-  //     $row.append(`
-  //       <div class="col-md-4">
-  //         <div class="card">
-  //           <img class="card-img-top" src="${event.image}" alt="Card image cap">
-  //           <div class="card-block">
-  //             <h4 class="card-title">${event.species}</h4>
-  //           </div>
-  //           <div class="card-block">
-  //             <h4 class="card-title">${event.maxLength} feet</h4>
-  //           </div>
-  //         </div>
-  //         <button class="btn btn-danger delete" data-id="${event._id}">Delete</button>
-  //         <button class="btn btn-primary edit" data-id="${event._id}">Edit</button>
-  //       </div>
-  //     `);
-  //   });
-  //   $main.html($row);
-  // }
-  // showEvents();
   //
   // function deleteUser() {
   //   let id = $(this).data('id');
@@ -225,10 +221,10 @@ $(() =>{
   //   .fail(showLoginForm);
   // }
   // function logout() {
-    if(event) event.preventDefault();
-    localStorage.removeItem('token');
-    showLoginForm();
-  }
+  if(event) event.preventDefault();
+  localStorage.removeItem('token');
+  showLoginForm();
+}
 
 // }
 );

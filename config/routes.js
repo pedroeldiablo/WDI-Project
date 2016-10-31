@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const eventsController = require('../controllers/events');
 const usersController = require('../controllers/users');
+const skiddleController = require('../controllers/skiddle');
 
 const jwt = require('jsonwebtoken');
 
@@ -34,12 +35,12 @@ router.route('/users/:id')
 
 router.route('/events')
   // .all(secureRoute)
-  .get(eventsController.index);
+  .get(skiddleController.index);
   // .post(eventsController.create);
 
-router.route('/events/:id')
+// router.route('/events/:id')
   // .all(secureRoute)
-  .get(eventsController.show);
+  // .get(eventsController.show);
   // .put(eventsController.update)
   // .delete(eventsController.delete);
 

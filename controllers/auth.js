@@ -1,21 +1,28 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const secret = require('../config/tokens').secret;
+const geocoder = require('geocoder');
+
 
 function register(req, res){
- User.create(req.body, (err, user) => {
-   if (err) return res.status(500).json({ message: "Something went wrong." });
+  geocoder.geocode(req.body.postcode, function ( err, data ) {
+    req.body.lat = data.results[0].geometry.location.lat;
+    req.body.lng = data.results[0].geometry.location.lng;
 
-   let payload = { _id: user._id, username: user.username };
-   let token = jwt.sign(payload, secret, { expiresIn: 60*60*24 });
+    User.create(req.body, (err, user) => {
+      if (err) return res.status(500).json({ message: "Something went wrong." });
+
+      let payload = { _id: user._id, username: user.username };
+      let token = jwt.sign(payload, secret, { expiresIn: 60*60*24 });
 
 
-   return res.status(201).json({
-     message: `Welcome ${user.username}!`,
-     user,
-     token
-   });
- });
+      return res.status(201).json({
+        message: `Welcome ${user.firstName}!`,
+        user,
+        token
+      });
+    });
+  });
 }
 
 function login(req, res){

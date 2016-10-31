@@ -2,8 +2,17 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-  username:  { type: String, unique: true, required: true },
+  firstName:  { type: String, required: true },
+  lastName:  { type: String, required: true },
   email:  { type: String, unique: true, required: true },
+  age:  { type: Number, required: true },
+  gender:  { type: String, required: true },
+  interestedIn:  { type: String, required: true },
+  postcode:  { type: String, required: true },
+  lat:  { type: Number, required: true },
+  lng:  { type: Number, required: true },
+  fact:  { type: String, required: true },
+  profilePic:  { type: String, required: true },
   passwordHash:  { type: String, required: true },
 
 });
@@ -39,7 +48,10 @@ userSchema
 //whitelisting
 let returnJson = {
  _id: json._id,
- username: json.username
+ firstName: json.username,
+ lat: json.lat,
+ lng: json.lng
+
 };
 return returnJson;
 

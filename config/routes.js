@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const sharksController = require('../controllers/sharks');
+const eventsController = require('../controllers/events');
 const usersController = require('../controllers/users');
 
 const jwt = require('jsonwebtoken');
@@ -32,15 +32,15 @@ router.route('/users/:id')
   .put(usersController.update)
   .delete(usersController.delete);
 
-router.route('/sharks')
+router.route('/events')
   .all(secureRoute)
-  .get(sharksController.index)
-  .post(sharksController.create);
+  .get(eventsController.index)
+  .post(eventsController.create);
 
-router.route('/sharks/:id')
+router.route('/events/:id')
   .all(secureRoute)
-  .get(sharksController.show)
-  .put(sharksController.update)
-  .delete(sharksController.delete);
+  .get(eventsController.show)
+  .put(eventsController.update)
+  .delete(eventsController.delete);
 
 module.exports = router;

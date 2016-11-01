@@ -1,7 +1,7 @@
 const request = require('request-promise');
 const eventsIndex = (req, res) => {
   request({
-    url: "http://www.skiddle.com/api/v1/events/",
+    url: "http://www.skiddle.co.uk/api/v1/events/",
     method: "GET",
     qs: {
       api_key: "19e3e956478924a5391be5b5e37fee57",

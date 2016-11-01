@@ -4,21 +4,20 @@ console.log("JS loaded!");
 $(function () {
 
   createMap();
-  getEvents();
 
   var $mapDiv = $('#map');
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 14
+    zoom: 12
   });
 
   function dateSetup() {
     removeCover();
+    getEvents();
   }
 
   function createMap() {
-
     navigator.geolocation.getCurrentPosition(function (position) {
       var latLng = {
         lat: position.coords.latitude,
@@ -57,17 +56,19 @@ $(function () {
   }
 
   function addEventMarkers(events) {
-    events.forEach(function (event) {
+    events.forEach(function (event, index) {
       var latLng = {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      console.log(event.date);
-      var marker = new google.maps.Marker({
-        position: latLng,
-        animation: google.maps.Animation.DROP,
-        map: map
-      });
+      console.log(index);
+      setTimeout(function dropMarker() {
+        var marker = new google.maps.Marker({
+          position: latLng,
+          animation: google.maps.Animation.DROP,
+          map: map
+        });
+      }, 60 * index);
     });
   }
 
@@ -87,7 +88,6 @@ $(function () {
   $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
-  $('.eventsIndex').on('click', getEvents);
 
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');
@@ -143,7 +143,7 @@ $(function () {
   function showUsers(users) {
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append('\n          <div class="col-md-4" id="profile' + user._id + '">\n          <div class="card">\n          <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n          <div class="card-block">\n          <h4 class="card-title">' + user.firstName + '</h4>\n          </div>\n          </div>\n          <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n          <!-- <button class="edit" data-id="' + user._id + '">Edit</button> -->\n          <button class="dateButton" data-id="' + user._id + '">Date</button>\n          </div>\n          ');
+      $row.append('\n        <div class="col-md-4" id="profile' + user._id + '">\n        <div class="card">\n        <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n        <div class="card-block">\n        <h4 class="card-title">' + user.firstName + '</h4>\n        </div>\n        </div>\n        <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n        <!-- <button class="edit" data-id="' + user._id + '">Edit</button> -->\n        <button class="dateButton" data-id="' + user._id + '">Date</button>\n        </div>\n        ');
     });
     $main.html($row);
   }
@@ -163,7 +163,7 @@ $(function () {
   function showEditForm(user) {
     if (event) event.preventDefault();
     console.log(user);
-    $main.html('\n          <h2>Edit User</h2>\n          <form method="put" action="/users/' + user._id + '">\n          <div class="form-group">\n          <input class="form-control" name="firstName" placeholder="Firstname" value="' + user.firstName + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="lastName" placeholder="Last Name" value="' + user.lastName + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email" value="' + user.email + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="age" placeholder="Age e.g 21" value="' + user.age + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="gender" placeholder="Male or Female?" value="' + user.gender + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="' + user.interestedIn + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="postcode" placeholder="Postcode" value="' + user.postcode + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="' + user.fact + '">\n          </div>\n          <div class="form-group">\n          <input class="form-control" name="profilePic" placeholder="Image Url" value="' + user.profilePic + '">\n          </div>\n          <button class="btn btn-primary">Update</button>\n          </form>\n          ');
+    $main.html('\n      <h2>Edit User</h2>\n      <form method="put" action="/users/' + user._id + '">\n      <div class="form-group">\n      <input class="form-control" name="firstName" placeholder="Firstname" value="' + user.firstName + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="lastName" placeholder="Last Name" value="' + user.lastName + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="email" placeholder="Email" value="' + user.email + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="age" placeholder="Age e.g 21" value="' + user.age + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="gender" placeholder="Male or Female?" value="' + user.gender + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="' + user.interestedIn + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="postcode" placeholder="Postcode" value="' + user.postcode + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="' + user.fact + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="profilePic" placeholder="Image Url" value="' + user.profilePic + '">\n      </div>\n      <button class="btn btn-primary">Update</button>\n      </form>\n      ');
   }
 
   function deleteUser() {

@@ -1,9 +1,15 @@
 console.log("JS loaded!");
 $(() => {
 
+  let today = new Date();
+  let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
+  let range = new Date(new Date(today).setDate(today.getDate()+7));
+
   createMap();
+  dateSlider();
 
   let $mapDiv =$('#map');
+  let eventMarkers = [];
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
@@ -12,7 +18,7 @@ $(() => {
 
   function dateSetup() {
     removeCover();
-    getEvents();
+    getEvents(today, range);
   }
 
   function createMap() {
@@ -33,7 +39,33 @@ $(() => {
     });
   }
 
-  function getEvents() {
+  function dateSlider() {
+    $("#slider").dateRangeSlider({
+      bounds:{
+        min: today,
+        max: dateBounds
+      },
+      defaultValues: {
+        min: today,
+        max: range
+      }
+
+    });
+
+    $("#slider").bind("userValuesChanged", function(e, data){
+      // get new events from API
+      let min = data.values.min;
+      let max = data.values.max;
+
+      getEvents(min, max);
+    });
+  }
+
+  function getEvents(min, max) {
+    removeMarkers();
+    let minDate = min.toISOString().split('T')[0];
+    let maxDate = max.toISOString().split('T')[0];
+
     console.log('getting events');
     $.ajax({
       url: `/events`,
@@ -42,7 +74,8 @@ $(() => {
         longitude: -0.0722,
         radius: 5,
         limit: 100,
-        date: "2016-11-3",
+        minDate: minDate,
+        maxDate: maxDate
       },
       method: "GET"
     }).done(function (data) {
@@ -53,30 +86,40 @@ $(() => {
     });
   }
 
+  // setTimeout(function dropMarker(){
+  //   let marker = new google.maps.Marker({
+  //     position: latLng,
+  //     animation: google.maps.Animation.DROP,
+  //     map
+  //   });
+  // }, 60 * index);
+
   function addEventMarkers(events) {
     events.forEach((event, index) => {
       let latLng =  {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      console.log(index);
-      setTimeout(function dropMarker(){
-        let marker = new google.maps.Marker({
-          position: latLng,
-          animation: google.maps.Animation.DROP,
-          map
-        });
-      }, 60 * index);
+      let marker = new google.maps.Marker({
+        position: latLng,
+        // animation: google.maps.Animation.DROP,
+        map
+      });
+      eventMarkers.push(marker);
     });
   }
 
-
-
   $('.mapCover').on('click', removeCover);
-
   function removeCover() {
     $('.mapCover').hide();
     $('.mainBox').hide();
+  }
+
+  function removeMarkers(){
+    for (var i = 0; i < eventMarkers.length; i++) {
+      eventMarkers[i].setMap(null);
+    }
+    eventMarkers = [];
   }
 
   let $main = $('main');
@@ -202,6 +245,50 @@ $(() => {
     $main.html($row);
   }
 
+  // google.maps.Circle.prototype.contains = function(latLng) {
+  //   return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
+  // };
+  //
+  // let bounds = new google.maps.LatLngBounds();
+  // let markers = [];
+  //
+  // markers.push(new google.maps.Marker({
+  //   map: map,
+  //   position: { lat: 51.55, lng: -0.078 }
+  // }));
+  //
+  // markers.push(new google.maps.Marker({
+  //   map: map,
+  //   position: { lat: 51.45, lng: -0.078 }
+  // }));
+  //
+  // markers.forEach((marker) => {
+  //   bounds.extend(marker.getPosition());
+  // });
+  //
+  // let centerOfBounds = bounds.getCenter();
+  //
+  // new google.maps.Marker({
+  //   map: map,
+  //   position: centerOfBounds,
+  //   animation: google.maps.Animation.DROP
+  // });
+  //
+  // let circle = new google.maps.Circle({
+  //   strokeColor: '#FF0000',
+  //   strokeOpacity: 0.8,
+  //   strokeWeight: 2,
+  //   fillColor: '#FF0000',
+  //   fillOpacity: 0.35,
+  //   map: map,
+  //   center: centerOfBounds,
+  //   radius: 1000
+  // });
+  //
+  // console.log(circle.contains(markers[1].getPosition()));
+
+  // });
+
   function getUser() {
     let id = $(this).data('id');
     let token = localStorage.getItem('token');
@@ -274,5 +361,5 @@ $(() => {
     localStorage.removeItem('token');
     showLoginForm();
   }
-}
-);
+
+});

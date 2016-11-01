@@ -1,18 +1,27 @@
 console.log("JS loaded!");
 $(() => {
 
+  let today = new Date();
+  let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
+  let range = new Date(new Date(today).setDate(today.getDate()+7));
+
   createMap();
-  getEvents();
+  dateSlider();
 
   let $mapDiv =$('#map');
+  let eventMarkers = [];
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 14
+    zoom: 12
   });
 
-  function createMap() {
+  function dateSetup() {
+    removeCover();
+    getEvents(today, range);
+  }
 
+  function createMap() {
     navigator.geolocation.getCurrentPosition(function(position) {
       let latLng = {
         lat: position.coords.latitude,
@@ -30,7 +39,33 @@ $(() => {
     });
   }
 
-  function getEvents() {
+  function dateSlider() {
+    $("#slider").dateRangeSlider({
+      bounds:{
+        min: today,
+        max: dateBounds
+      },
+      defaultValues: {
+        min: today,
+        max: range
+      }
+
+    });
+
+    $("#slider").bind("userValuesChanged", function(e, data){
+      // get new events from API
+      let min = data.values.min;
+      let max = data.values.max;
+
+      getEvents(min, max);
+    });
+  }
+
+  function getEvents(min, max) {
+    removeMarkers();
+    let minDate = min.toISOString().split('T')[0];
+    let maxDate = max.toISOString().split('T')[0];
+
     console.log('getting events');
     $.ajax({
       url: `/events`,
@@ -39,7 +74,8 @@ $(() => {
         longitude: -0.0722,
         radius: 5,
         limit: 100,
-        date: "2016-11-3",
+        minDate: minDate,
+        maxDate: maxDate
       },
       method: "GET"
     }).done(function (data) {
@@ -50,34 +86,56 @@ $(() => {
     });
   }
 
+  // setTimeout(function dropMarker(){
+  //   let marker = new google.maps.Marker({
+  //     position: latLng,
+  //     animation: google.maps.Animation.DROP,
+  //     map
+  //   });
+  // }, 60 * index);
+
   function addEventMarkers(events) {
-    events.forEach((event) => {
+    events.forEach((event, index) => {
       let latLng =  {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      console.log(event.date);
       let marker = new google.maps.Marker({
         position: latLng,
-        animation: google.maps.Animation.DROP,
+        // animation: google.maps.Animation.DROP,
         map
       });
+      eventMarkers.push(marker);
     });
   }
 
+  $('.mapCover').on('click', removeCover);
+  function removeCover() {
+    $('.mapCover').hide();
+    $('.mainBox').hide();
+  }
+
+  function removeMarkers(){
+    for (var i = 0; i < eventMarkers.length; i++) {
+      eventMarkers[i].setMap(null);
+    }
+    eventMarkers = [];
+  }
+
   let $main = $('main');
-  $('.register').on('click', showRegisterForm);
-  $('.login').on('click', showLoginForm);
+  let $loginForm = $('nav');
   $main.on('submit', 'form', handleForm);
+  $loginForm.on('submit', 'form', handleForm);
   $main.on('click', 'button.delete', deleteUser);
   $main.on('click', 'button.edit', getUser);
+  $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
-  $('.eventsIndex').on('click', getEvents);
 
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');
   // }
+  //
   // if(isLoggedIn()) {
   //   getUsers();
   // } else {
@@ -87,61 +145,50 @@ $(() => {
   function showRegisterForm() {
     if(event) event.preventDefault();
     $main.html(`
-      <h2>Register</h2>
+      <h2>Create an account</h2>
       <form method="post" action="/register">
       <div class="form-group">
-      <input class="form-control" name="firstName" placeholder="First Name">
+      <input class="form-control" id="firstName" name="firstName" placeholder="First Name">
       </div>
       <div class="form-group">
-      <input class="form-control" name="lastName" placeholder="Last Name">
+      <input class="form-control" id="lastName" name="lastName" placeholder="Last Name">
       </div>
       <div class="form-group">
-      <input class="form-control" name="email" placeholder="Email">
+      <input class="form-control" id="email" name="email" placeholder="Email">
       </div>
       <div class="form-group">
-      <input class="form-control" name="age" placeholder="Age e.g 21">
+      <input class="form-control" id="age" name="age" placeholder="Age e.g 21">
       </div>
       <div class="form-group">
       <input class="form-control" type="password" name="password" placeholder="Password">
       </div>
       <div class="form-group">
-      <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">
+      <input class="form-control" type="password" name="passwordConfirmation" placeholder="Reenter password">
       </div>
       <div class="form-group">
       <input class="form-control" name="gender" placeholder="Male or Female?">
       </div>
       <div class="form-group">
-      <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?">
+      <input class="form-control" name="interestedIn" placeholder="Looking for?">
       </div>
       <div class="form-group">
       <input class="form-control" name="postcode" placeholder="Postcode">
       </div>
       <div class="form-group">
-      <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!">
+      <input class="form-control" name="fact" placeholder="Image Url">
       </div>
       <div class="form-group">
       <input class="form-control" name="profilePic" placeholder="Upload your image here">
       </div>
       <button class="btn btn-primary">Register</button>
       </form>
-      `);
+      `
+    );
   }
 
   function showLoginForm() {
     if(event) event.preventDefault();
-    $main.html(`
-      <h2>Login</h2>
-      <form method="post" action="/login">
-      <div class="form-group">
-      <input class="form-control" name="email" placeholder="Email">
-      </div>
-      <div class="form-group">
-      <input class="form-control" type="password" name="password" placeholder="Password">
-      </div>
-      <button class="btn btn-primary">Log In</button>
-      </form>
-      `);
-    }
+  }
 
   function handleForm() {
     if(event) event.preventDefault();
@@ -178,24 +225,25 @@ $(() => {
   }
 
   function showUsers(users) {
-    console.log(users);
     let $row = $('<div class="row"></div>');
     users.forEach((user) => {
       $row.append(`
-        <div class="col-md-4">
+        <div class="col-md-4" id="profile${user._id}">
         <div class="card">
-        <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">
+        <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
         <div class="card-block">
         <h4 class="card-title">${user.firstName}</h4>
         </div>
         </div>
-        <button class="btn btn-danger delete" data-id="${user._id}">Delete</button>
-        <button class="btn btn-primary edit" data-id="${user._id}">Edit</button>
+        <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
+        <!-- <button class="edit" data-id="${user._id}">Edit</button> -->
+        <button class="dateButton" data-id="${user._id}">Date</button>
         </div>
-        `);
-      });
-      $main.html($row);
-    }
+        `
+      );
+    });
+    $main.html($row);
+  }
 
   function getUser() {
     let id = $(this).data('id');
@@ -211,42 +259,43 @@ $(() => {
     .fail(showLoginForm);
   }
 
-function showEditForm(user) {
-  if(event) event.preventDefault();
-  console.log(user);
-  $main.html(`
-    <h2>Edit User</h2>
-    <form method="put" action="/users/${user._id}">
-    <div class="form-group">
-    <input class="form-control" name="firstName" placeholder="Firstname" value="${user.firstName}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="lastName" placeholder="Last Name" value="${user.lastName}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="email" placeholder="Email" value="${user.email}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="age" placeholder="Age e.g 21" value="${user.age}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="gender" placeholder="Male or Female?" value="${user.gender}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="${user.interestedIn}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="postcode" placeholder="Postcode" value="${user.postcode}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="${user.fact}">
-    </div>
-    <div class="form-group">
-    <input class="form-control" name="profilePic" placeholder="Image Url" value="${user.profilePic}">
-    </div>
-    <button class="btn btn-primary">Update</button>
-    </form>
-    `);
+  function showEditForm(user) {
+    if(event) event.preventDefault();
+    console.log(user);
+    $main.html(`
+      <h2>Edit User</h2>
+      <form method="put" action="/users/${user._id}">
+      <div class="form-group">
+      <input class="form-control" name="firstName" placeholder="Firstname" value="${user.firstName}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="lastName" placeholder="Last Name" value="${user.lastName}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="email" placeholder="Email" value="${user.email}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="age" placeholder="Age e.g 21" value="${user.age}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="gender" placeholder="Male or Female?" value="${user.gender}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="${user.interestedIn}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="postcode" placeholder="Postcode" value="${user.postcode}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="${user.fact}">
+      </div>
+      <div class="form-group">
+      <input class="form-control" name="profilePic" placeholder="Image Url" value="${user.profilePic}">
+      </div>
+      <button class="btn btn-primary">Update</button>
+      </form>
+      `
+    );
   }
 
   function deleteUser() {
@@ -262,12 +311,14 @@ function showEditForm(user) {
     .done(getUsers)
     .fail(showLoginForm);
   }
+
 // logs user out by removing local token
   function logout() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
     showLoginForm();
   }
+
   google.maps.Circle.prototype.contains = function(latLng) {
     return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
   };

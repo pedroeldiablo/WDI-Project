@@ -9,8 +9,8 @@ const eventsIndex = (req, res) => {
       longitude: req.query.longitude,
       radius: req.query.radius,
       limit: req.query.limit,
-      minDate: req.query.date,
-      maxDate: req.query.date
+      minDate: req.query.minDate,
+      maxDate: req.query.maxDate
     },
     json: true
   })

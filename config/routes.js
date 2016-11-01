@@ -21,7 +21,7 @@ function secureRoute(req, res, next) {
 router.route("/register")
   .post(authController.register);
 router.route("/login")
-  .post(secureRoute, authController.login);
+  .post(authController.login);
 
 router.route('/users')
   .get(secureRoute, usersController.index);

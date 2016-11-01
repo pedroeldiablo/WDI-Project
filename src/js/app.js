@@ -278,20 +278,24 @@ function showEditForm(user) {
 
   // function createDate() {
   navigator.geolocation.getCurrentPosition(function(position) {
-    let latLng = {
+    let loctn = {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
+
     };
-// preset 1st dater location pushed to markers array
+    // console.log(loctn);
+// set 1st dater location to geolocation pushed to markers array
     markers.push(new google.maps.Marker({
       map: map,
-      position: latLng
+      position: loctn,
       // position: { lat: 51.55, lng: -0.078 }
+
+      icon: 'images/pinklocationicon.png'
     }));
   // preset 2nd dater location pushed to markers array
     markers.push(new google.maps.Marker({
       map: map,
-      position: { lat: 48.85, lng: 2.20 }
+      position: { lat: 51.507, lng: -0.1276 }
     }));
     // sets bounds using markers array. currently two, but would be possible to use any number
     markers.forEach((marker) => {
@@ -299,12 +303,14 @@ function showEditForm(user) {
     });
     // finds the middle of the points from the markers array
       let centerOfBounds = bounds.getCenter();
+
     // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
       new google.maps.Marker({
         map: map,
         position: centerOfBounds,
         animation: google.maps.Animation.DROP
       });
+
     // adds a translucent circle to the map taking centreOfBounds as it's centre. This could be made adjustable by creating an input for radius
       let circle = new google.maps.Circle({
         strokeColor: '#FF0000',
@@ -316,8 +322,11 @@ function showEditForm(user) {
         center: centerOfBounds,
         radius: 1000
       });
+// recenters map on centerOfBounds/date location
+      map.panTo(centerOfBounds);
     // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
       console.log(circle.contains(markers[1].getPosition()));
+      console.log(markers);
   });
 
 });

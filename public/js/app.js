@@ -11,7 +11,7 @@ $(function () {
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 10
+    zoom: 14
   });
 
   function createMap() {
@@ -27,7 +27,7 @@ $(function () {
       var marker = new google.maps.Marker({
         position: latLng,
         animation: google.maps.Animation.DROP,
-        draggable: true,
+        icon: 'https://lh4.ggpht.com/Tr5sntMif9qOPrKV_UVl7K8A_V3xQDgA7Sw_qweLUFlg76d_vGFA7q1xIKZ6IcmeGqg=w300',
         map: map
       });
     });
@@ -38,10 +38,11 @@ $(function () {
     $.ajax({
       url: '/events',
       data: {
-        lat: 51.5,
-        lng: -0.2,
+        latitude: 51.5153,
+        longitude: -0.0722,
         radius: 5,
-        limit: 100
+        limit: 100,
+        date: "2016-11-3"
       },
       method: "GET"
     }).done(function (data) {
@@ -58,7 +59,7 @@ $(function () {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      console.log(latLng);
+      console.log(event.date);
       var marker = new google.maps.Marker({
         position: latLng,
         animation: google.maps.Animation.DROP,
@@ -67,15 +68,16 @@ $(function () {
     });
   }
 
-  // let $main = $('main');
-  // $('.register').on('click', showRegisterForm);
-  // $('.login').on('click', showLoginForm);
-  // $main.on('submit', 'form', handleForm);
-  // $main.on('click', 'button.delete', deleteUser);
-  // $main.on('click', 'button.edit', getUser);
-  // $('.usersIndex').on('click', getUsers);
-  // $('.logout').on('click', logout);
-  // $('.eventsIndex').on('click', getEvents);
+  var $main = $('main');
+  $('.register').on('click', showRegisterForm);
+  $('.login').on('click', showLoginForm);
+  $main.on('submit', 'form', handleForm);
+  $main.on('click', 'button.delete', deleteUser);
+  $main.on('click', 'button.edit', getUser);
+  $('.usersIndex').on('click', getUsers);
+  $('.logout').on('click', logout);
+  $('.eventsIndex').on('click', getEvents);
+
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');
   // }
@@ -84,149 +86,91 @@ $(function () {
   // } else {
   //   showLoginForm();
   // }
-  // function showRegisterForm() {
-  //   if(event) event.preventDefault();
-  //   $main.html(`
-  //     <h2>Register</h2>
-  //     <form method="post" action="/register">
-  //       <div class="form-group">
-  //         <input class="form-control" name="firstName" placeholder="First Name">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="lastName" placeholder="Last Name">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="email" placeholder="Email">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="age" placeholder="Age e.g 21">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" type="password" name="password" placeholder="Password">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="gender" placeholder="Male or Female?">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="postcode" placeholder="Postcode">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" name="profilePic" placeholder="Upload your image here">
-  //       </div>
-  //       <button class="btn btn-primary">Register</button>
-  //     </form>
-  //   `);
-  // }
-  //
-  // function showLoginForm() {
-  //   if(event) event.preventDefault();
-  //   $main.html(`
-  //     <h2>Login</h2>
-  //     <form method="post" action="/login">
-  //       <div class="form-group">
-  //         <input class="form-control" name="email" placeholder="Email">
-  //       </div>
-  //       <div class="form-group">
-  //         <input class="form-control" type="password" name="password" placeholder="Password">
-  //       </div>
-  //       <button class="btn btn-primary">Register</button>
-  //     </form>
-  //   `);
-  // }
-  // function showEditForm(user) {
-  //   if(event) event.preventDefault();
-  //   $main.html(`
-  //     <h2>Edit User</h2>
-  //     <form method="put" action="/users/${user._id}">
-  //       <div class="form-group">
-  //         <input class="form-control" name="username" placeholder="Username" value="${user.username}">
-  //       </div>
-  //       <button class="btn btn-primary">Update</button>
-  //     </form>
-  //   `);
-  // }
-  // function handleForm() {
-  //   if(event) event.preventDefault();
-  //   let token = localStorage.getItem('token');
-  //   let $form = $(this);
-  //   let url = $form.attr('action');
-  //   let method = $form.attr('method');
-  //   let data = $form.serialize();
-  //   $.ajax({
-  //     url,
-  //     method,
-  //     data,
-  //     beforeSend: function(jqXHR) {
-  //       if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-  //     }
-  //   }).done((data) => {
-  //     if(data.token) localStorage.setItem('token', data.token);
-  //     getUsers();
-  //   }).fail(showLoginForm);
-  // }
-  // function getUsers() {}
-  //
-  // function showUsers(users) {
-  //   console.log(users);
-  //   let $row = $('<div class="row"></div>');
-  //   users.forEach((user) => {
-  //     $row.append(`
-  //       <div class="col-md-4">
-  //         <div class="card">
-  //           <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">
-  //           <div class="card-block">
-  //             <h4 class="card-title">${user.firstName}</h4>
-  //           </div>
-  //         </div>
-  //         <button class="btn btn-danger delete" data-id="${user._id}">Delete</button>
-  //         <button class="btn btn-primary edit" data-id="${user._id}">Edit</button>
-  //       </div>
-  //     `);
-  //   });
-  //   $main.html($row);
-  // }
-  //
-  //
-  // function deleteUser() {
-  //   let id = $(this).data('id');
-  //   let token = localStorage.getItem('token');
-  //   $.ajax({
-  //     url: `/users/${id}`,
-  //     method: "DELETE",
-  //     beforeSend: function(jqXHR) {
-  //       if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-  //     }
-  //   })
-  //   .done(getUsers)
-  //   .fail(showLoginForm);
-  // }
-  // function getUser() {
-  //   let id = $(this).data('id');
-  //   let token = localStorage.getItem('token');
-  //   $.ajax({
-  //     url: `/users/${id}`,
-  //     method: "GET",
-  //     beforeSend: function(jqXHR) {
-  //       if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-  //     }
-  //   })
-  //   .done(showEditForm)
-  //   .fail(showLoginForm);
-  // }
-  // function logout() {
-  if (event) event.preventDefault();
-  localStorage.removeItem('token');
-  showLoginForm();
-}
 
-// }
-);
+  function showRegisterForm() {
+    if (event) event.preventDefault();
+    $main.html('\n      <h2>Register</h2>\n      <form method="post" action="/register">\n        <div class="form-group">\n          <input class="form-control" name="firstName" placeholder="First Name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lastName" placeholder="Last Name">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="Age e.g 21">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="passwordConfirmation" placeholder="Password Confirmation">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="gender" placeholder="Male or Female?">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="postcode" placeholder="Postcode">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="profilePic" placeholder="Upload your image here">\n        </div>\n        <button class="btn btn-primary">Register</button>\n      </form>\n    ');
+  }
+
+  function showLoginForm() {
+    if (event) event.preventDefault();
+    $main.html('\n      <h2>Login</h2>\n      <form method="post" action="/login">\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email">\n        </div>\n        <div class="form-group">\n          <input class="form-control" type="password" name="password" placeholder="Password">\n        </div>\n        <button class="btn btn-primary">Log In</button>\n      </form>\n    ');
+  }
+
+  function handleForm() {
+    if (event) event.preventDefault();
+    var token = localStorage.getItem('token');
+    var $form = $(this);
+    var url = $form.attr('action');
+    var method = $form.attr('method');
+    var data = $form.serialize();
+    $.ajax({
+      url: url,
+      method: method,
+      data: data,
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(function (data) {
+      if (data.token) localStorage.setItem('token', data.token);
+      getUsers();
+    }).fail(showLoginForm);
+  }
+
+  function getUsers() {
+    if (event) event.preventDefault();
+    var token = localStorage.getItem('token');
+    $.ajax({
+      url: '/users',
+      method: "GET",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(showUsers).fail(showLoginForm);
+  }
+
+  function showUsers(users) {
+    console.log(users);
+    var $row = $('<div class="row"></div>');
+    users.forEach(function (user) {
+      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="http://fillmurray.com/300/300" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.firstName + '</h4>\n            </div>\n          </div>\n          <button class="btn btn-danger delete" data-id="' + user._id + '">Delete</button>\n          <button class="btn btn-primary edit" data-id="' + user._id + '">Edit</button>\n        </div>\n      ');
+    });
+    $main.html($row);
+  }
+
+  function getUser() {
+    var id = $(this).data('id');
+    var token = localStorage.getItem('token');
+    $.ajax({
+      url: '/users/' + id,
+      method: "GET",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(showEditForm).fail(showLoginForm);
+  }
+
+  function showEditForm(user) {
+    if (event) event.preventDefault();
+    console.log(user);
+    $main.html('\n      <h2>Edit User</h2>\n      <form method="put" action="/users/' + user._id + '">\n        <div class="form-group">\n          <input class="form-control" name="firstName" placeholder="Firstname" value="' + user.firstName + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="lastName" placeholder="Last Name" value="' + user.lastName + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="email" placeholder="Email" value="' + user.email + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="age" placeholder="Age e.g 21" value="' + user.age + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="gender" placeholder="Male or Female?" value="' + user.gender + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="' + user.interestedIn + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="postcode" placeholder="Postcode" value="' + user.postcode + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="' + user.fact + '">\n        </div>\n        <div class="form-group">\n          <input class="form-control" name="profilePic" placeholder="Image Url" value="' + user.profilePic + '">\n        </div>\n        <button class="btn btn-primary">Update</button>\n      </form>\n    ');
+  }
+
+  function deleteUser() {
+    var id = $(this).data('id');
+    var token = localStorage.getItem('token');
+    $.ajax({
+      url: '/users/' + id,
+      method: "DELETE",
+      beforeSend: function beforeSend(jqXHR) {
+        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+      }
+    }).done(getUsers).fail(showLoginForm);
+  }
+
+  function logout() {
+    if (event) event.preventDefault();
+    localStorage.removeItem('token');
+    showLoginForm();
+  }
+});

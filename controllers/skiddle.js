@@ -5,10 +5,12 @@ const eventsIndex = (req, res) => {
     method: "GET",
     qs: {
       api_key: "19e3e956478924a5391be5b5e37fee57",
-      latitude: req.query.lat,
-      longitude: req.query.lng,
+      latitude: req.query.latitude,
+      longitude: req.query.longitude,
       radius: req.query.radius,
-      limit: req.query.limit
+      limit: req.query.limit,
+      minDate: req.query.date,
+      maxDate: req.query.date
     },
     json: true
   })

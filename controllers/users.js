@@ -1,12 +1,5 @@
-module.exports = {
- index:  usersIndex,
- show:   usersShow,
- // create: usersCreate,
- update: usersUpdate,
- delete: usersDelete
-};
-
 const User = require('../models/user');
+
 function usersIndex(req, res) {
  User.find((err, users) => {
    if (err) return res.status(500).json({ message: "Something went wrong." });
@@ -22,12 +15,12 @@ function usersShow(req, res) {
  });
 }
 
-// function usersCreate(req, res) {
-//   User.create(req.body, (err, user) => {
-//     if(err) return res.status(400).json({ error: "400: Invalid Data"});
-//     res.status(201).json(user);
-//   });
-// }
+function usersCreate(req, res) {
+  User.create(req.body, (err, user) => {
+    if(err) return res.status(400).json({ error: "400: Invalid Data"});
+    res.status(201).json(user);
+  });
+}
 
 function usersUpdate(req, res) {
  User.findByIdAndUpdate(req.params.id, req.body, { new: true },  (err, user) => {
@@ -44,3 +37,12 @@ function usersDelete(req, res) {
    return res.status(204).send();
  });
 }
+
+
+module.exports = {
+ index:  usersIndex,
+ show:   usersShow,
+ create: usersCreate,
+ update: usersUpdate,
+ delete: usersDelete
+};

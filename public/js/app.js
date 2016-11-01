@@ -213,4 +213,47 @@ $(function () {
     localStorage.removeItem('token');
     showLoginForm();
   }
+
+  google.maps.Circle.prototype.contains = function (latLng) {
+    return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
+  };
+
+  var bounds = new google.maps.LatLngBounds();
+
+  var markers = [];
+
+  markers.push(new google.maps.Marker({
+    map: map,
+    position: { lat: 51.55, lng: -0.078 }
+  }));
+
+  markers.push(new google.maps.Marker({
+    map: map,
+    position: { lat: 51.45, lng: -0.078 }
+  }));
+
+  markers.forEach(function (marker) {
+    bounds.extend(marker.getPosition());
+  });
+
+  var centerOfBounds = bounds.getCenter();
+
+  new google.maps.Marker({
+    map: map,
+    position: centerOfBounds,
+    animation: google.maps.Animation.DROP
+  });
+
+  var circle = new google.maps.Circle({
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    map: map,
+    center: centerOfBounds,
+    radius: 1000
+  });
+
+  console.log(circle.contains(markers[1].getPosition()));
 });

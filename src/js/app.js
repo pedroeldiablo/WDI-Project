@@ -126,7 +126,7 @@ $(() => {
       </form>
       `);
     }
-    
+
     function showLoginForm() {
       if(event) event.preventDefault();
       $main.html(`
@@ -192,93 +192,6 @@ $(() => {
             <button class="btn btn-danger delete" data-id="${user._id}">Delete</button>
             <button class="btn btn-primary edit" data-id="${user._id}">Edit</button>
             </div>
-<<<<<<< HEAD
-          </div>
-          <button class="btn btn-danger delete" data-id="${shark._id}">Delete</button>
-          <button class="btn btn-primary edit" data-id="${shark._id}">Edit</button>
-        </div>
-      `);
-    });
-    $main.html($row);
-  }
-  showSharks();
-  function deleteUser() {
-    let id = $(this).data('id');
-    let token = localStorage.getItem('token');
-    $.ajax({
-      url: `/users/${id}`,
-      method: "DELETE",
-      beforeSend: function(jqXHR) {
-        if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-      }
-    })
-    .done(getUsers)
-    .fail(showLoginForm);
-  }
-  function getUser() {
-    let id = $(this).data('id');
-    let token = localStorage.getItem('token');
-    $.ajax({
-      url: `/users/${id}`,
-      method: "GET",
-      beforeSend: function(jqXHR) {
-        if(token) return jqXHR.setRequestHeader('Authorization', `Bearer ${token}`);
-      }
-    })
-    .done(showEditForm)
-    .fail(showLoginForm);
-  }
-  function logout() {
-    if(event) event.preventDefault();
-    localStorage.removeItem('token');
-    showLoginForm();
-  }
-
-  google.maps.Circle.prototype.contains = function(latLng) {
-    return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
-  };
-
-  let bounds = new google.maps.LatLngBounds();
-
-  let markers = [];
-
-  markers.push(new google.maps.Marker({
-    map: map,
-    position: { lat: 51.55, lng: -0.078 }
-  }));
-
-  markers.push(new google.maps.Marker({
-    map: map,
-    position: { lat: 51.45, lng: -0.078 }
-  }));
-
-  markers.forEach((marker) => {
-    bounds.extend(marker.getPosition());
-  });
-
-  let centerOfBounds = bounds.getCenter();
-
-  new google.maps.Marker({
-    map: map,
-    position: centerOfBounds,
-    animation: google.maps.Animation.DROP
-  });
-
-  let circle = new google.maps.Circle({
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35,
-    map: map,
-    center: centerOfBounds,
-    radius: 1000
-  });
-
-  console.log(circle.contains(markers[1].getPosition()));
-
-});
-=======
             `);
           });
           $main.html($row);
@@ -357,4 +270,3 @@ $(() => {
           }
         }
       );
->>>>>>> development

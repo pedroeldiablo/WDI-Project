@@ -4,44 +4,72 @@
     <meta charset="utf-8">
     <title>Sharkopedia</title>
     <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWU2hcIM0O2y4pK1EPDhP-mJ_AshrCiTE" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
     <script src="/js/app.js" charset="utf-8"></script>
   </head>
   <body>
-    <nav class="navbar navbar-light bg-faded">
+    <nav class="navbar">
       <div class="container">
-        <a class="navbar-brand" href="#">LocDate</a>
-        <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
-          &#9776;
-        </button>
-        <div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
-          <ul class="nav navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link usersIndex loggedIn" href="#">Users</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link eventsIndex loggedIn" href="#">Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link register loggedOut" href="#">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link login loggedOut" href="#">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link logout loggedIn" href="#">Logout</a>
-            </li>
-          </ul>
+        <div class="collapse navbar-toggleable-xs">
+          <form method="post" action="/login">
+            <div class="form-group">
+              <input class="form-control" name="email"  id="loginEmail" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input class="form-control" type="password" name="password" id="loginPassword" placeholder="Password">
+            </div>
+            <button class="btn btn-primary">Log In</button>
+          </form>
         </div>
       </div>
     </nav>
-    <main class="container"></main>
 
-    <div id="map"></div>
-
+    <div class="content">
+      <div id="map"></div>
+      <div class="mapCover"></div>
+      <div class="mainBox">
+        <main>
+          <h2>Create an account</h2>
+          <form method="post" action="/register">
+            <div class="form-group">
+              <input class="form-control" id="firstName" name="firstName" placeholder="First Name">
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="lastName" name="lastName" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="age" name="age" placeholder="Age">
+            </div>
+            <div class="form-group">
+              <input class="form-control" type="password" name="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+              <input class="form-control" type="password" name="passwordConfirmation" placeholder="Reenter password">
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="gender" placeholder="Male or Female?">
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="interestedIn" placeholder="Looking for?">
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="postcode" placeholder="Postcode">
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="fact" placeholder="Image Url">
+            </div>
+            <div class="form-group">
+              <input class="form-control" name="profilePic" placeholder="Upload your image here">
+            </div>
+            <button class="btn btn-primary">Register</button>
+          </form>
+        </main>
+      </div>
+    </div>
   </body>
 </html>

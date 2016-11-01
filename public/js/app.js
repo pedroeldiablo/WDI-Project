@@ -3,10 +3,16 @@
 console.log("JS loaded!");
 $(function () {
 
+  var today = new Date();
+  var bounds = new Date(new Date(today).setMonth(today.getMonth() + 1));
+  var range = new Date(new Date(today).setDate(today.getDate() + 7));
+
   createMap();
-  getEvents();
+  getEvents(today, range);
+  dateSlider();
 
   var $mapDiv = $('#map');
+  var markers = [];
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
@@ -25,14 +31,39 @@ $(function () {
 
       var marker = new google.maps.Marker({
         position: latLng,
-        animation: google.maps.Animation.DROP,
+        // animation: google.maps.Animation.DROP,
         icon: 'https://lh4.ggpht.com/Tr5sntMif9qOPrKV_UVl7K8A_V3xQDgA7Sw_qweLUFlg76d_vGFA7q1xIKZ6IcmeGqg=w300',
         map: map
       });
     });
   }
 
-  function getEvents() {
+  function dateSlider() {
+    $("#slider").dateRangeSlider({
+      bounds: {
+        min: today,
+        max: bounds
+      },
+      defaultValues: {
+        min: today,
+        max: range
+      }
+
+    });
+
+    $("#slider").bind("userValuesChanged", function (e, data) {
+      // get new events from API
+      var min = data.values.min;
+      var max = data.values.max;
+
+      getEvents(min, max);
+    });
+  }
+
+  function getEvents(min, max) {
+    var minDate = min.toISOString().split('T')[0];
+    var maxDate = max.toISOString().split('T')[0];
+
     console.log('getting events');
     $.ajax({
       url: '/events',
@@ -41,7 +72,8 @@ $(function () {
         longitude: -0.0722,
         radius: 5,
         limit: 100,
-        date: "2016-11-3"
+        minDate: minDate,
+        maxDate: maxDate
       },
       method: "GET"
     }).done(function (data) {
@@ -53,6 +85,7 @@ $(function () {
   }
 
   function addEventMarkers(events) {
+    removeMarkers();
     events.forEach(function (event) {
       var latLng = {
         lat: event.venue.latitude,
@@ -61,10 +94,18 @@ $(function () {
       console.log(event.date);
       var marker = new google.maps.Marker({
         position: latLng,
-        animation: google.maps.Animation.DROP,
+        // animation: google.maps.Animation.DROP,
         map: map
       });
+      markers.push(marker);
     });
+  }
+
+  function removeMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
   }
 
   var $main = $('main');
@@ -75,7 +116,7 @@ $(function () {
   $main.on('click', 'button.edit', getUser);
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
-  $('.eventsIndex').on('click', getEvents);
+  // $('.eventsIndex').on('click', getEvents);
 
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');

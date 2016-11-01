@@ -18,62 +18,65 @@ const userSchema = new mongoose.Schema({
 });
 
 function setPassword(value){
- this._password    = value;
- this.passwordHash = bcrypt.hashSync(value, bcrypt.genSaltSync(8));
+  this._password    = value;
+  this.passwordHash = bcrypt.hashSync(value, bcrypt.genSaltSync(8));
 }
 
 function setPasswordConfirmation(passwordConfirmation) {
- this._passwordConfirmation = passwordConfirmation;
+  this._passwordConfirmation = passwordConfirmation;
 }
 
 function validatePasswordHash() {
- if (this.isNew) {
-   if (!this._password) {
-     return this.invalidate("password", "A password is required.");
-   }
+  if (this.isNew) {
+    if (!this._password) {
+      return this.invalidate("password", "A password is required.");
+    }
 
-   if (this._password !== this._passwordConfirmation) {
-     return this.invalidate("passwordConfirmation", "Passwords do not match.");
-   }
- }
+    if (this._password !== this._passwordConfirmation) {
+      return this.invalidate("passwordConfirmation", "Passwords do not match.");
+    }
+  }
 }
 
 function validatePassword(password){
- return bcrypt.compareSync(password, this.passwordHash);
+  return bcrypt.compareSync(password, this.passwordHash);
 }
 userSchema
 .set('toJSON', {
- transform: function(doc, json) {
+  transform: function(doc, json) {
 
-//whitelisting
-let returnJson = {
- _id: json._id,
- firstName: json.username,
- lat: json.lat,
- lng: json.lng
+    //whitelisting
+    let returnJson = {
+      _id: json._id,
+      firstName: json.firstName,
+      lastName: json.lastName,
+      email: json.email,
+      gender: json.gender,
+      interestedIn: json.interestedIn,
+      postcode: json.postcode,
+      fact: json.fact,
+      profilePic: json.profilePic,
+      age: json.age,
+      lat: json.lat,
+      lng: json.lng
 
-};
-return returnJson;
-
-//blacklisting
-   // delete json.passwordHash;
-   // delete json.email;
-   // delete json.__v;
-   // return json;
- }
+    };
+    return returnJson;
+    
+  }
 });
 
 userSchema
- .virtual('password')
- .set(setPassword);
+.virtual('password')
+.set(setPassword);
 
 userSchema
- .virtual("passwordConfirmation")
- .set(setPasswordConfirmation);
+.virtual("passwordConfirmation")
+.set(setPasswordConfirmation);
 
 userSchema
- .path("passwordHash")
- .validate(validatePasswordHash);
+.path("passwordHash")
+.validate(validatePasswordHash);
 
 userSchema.methods.validatePassword = validatePassword;
 

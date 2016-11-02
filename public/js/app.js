@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 console.log("JS loaded!");
 $(function () {
@@ -16,7 +16,141 @@ $(function () {
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12
+    zoom: 12,
+    styles: [{
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#f5f5f5"
+      }]
+    }, {
+      "elementType": "labels.icon",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#616161"
+      }]
+    }, {
+      "elementType": "labels.text.stroke",
+      "stylers": [{
+        "color": "#f5f5f5"
+      }]
+    }, {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "administrative.land_parcel",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#bdbdbd"
+      }]
+    }, {
+      "featureType": "poi",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#eeeeee"
+      }]
+    }, {
+      "featureType": "poi",
+      "elementType": "labels.text",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "poi",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#757575"
+      }]
+    }, {
+      "featureType": "poi.business",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "poi.park",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#e5e5e5"
+      }]
+    }, {
+      "featureType": "poi.park",
+      "elementType": "labels.text",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "poi.park",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#9e9e9e"
+      }]
+    }, {
+      "featureType": "road",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#ffffff"
+      }]
+    }, {
+      "featureType": "road.arterial",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#757575"
+      }]
+    }, {
+      "featureType": "road.highway",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#dadada"
+      }]
+    }, {
+      "featureType": "road.highway",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#616161"
+      }]
+    }, {
+      "featureType": "road.local",
+      "elementType": "labels",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }, {
+      "featureType": "road.local",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#9e9e9e"
+      }]
+    }, {
+      "featureType": "transit.line",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#e5e5e5"
+      }]
+    }, {
+      "featureType": "transit.station",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#eeeeee"
+      }]
+    }, {
+      "featureType": "water",
+      "elementType": "geometry",
+      "stylers": [{
+        "color": "#c9c9c9"
+      }]
+    }, {
+      "featureType": "water",
+      "elementType": "labels.text.fill",
+      "stylers": [{
+        "color": "#9e9e9e"
+      }]
+    }]
   });
 
   function dateSetup(data) {
@@ -85,7 +219,7 @@ $(function () {
 
     console.log('getting events');
     $.ajax({
-      url: '/events',
+      url: "/events",
       data: {
         latitude: 51.5153,
         longitude: -0.0722,
@@ -143,15 +277,15 @@ $(function () {
   $('.usersIndex').on('click', getUsers);
   $('.logout').on('click', logout);
 
-  // function isLoggedIn() {
-  //   return !!localStorage.getItem('token');
-  // }
-  //
-  // if(isLoggedIn()) {
-  //   getUsers();
-  // } else {
-  //   showLoginForm();
-  // }
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
+  if (isLoggedIn()) {
+    getUsers();
+  } else {
+    showLoginForm();
+  }
 
   function showLoginForm() {
     if (event) event.preventDefault();
@@ -169,7 +303,7 @@ $(function () {
       method: method,
       data: data,
       beforeSend: function beforeSend(jqXHR) {
-        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+        if (token) return jqXHR.setRequestHeader('Authorization', "Bearer " + token);
       }
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
@@ -181,10 +315,10 @@ $(function () {
     if (event) event.preventDefault();
     var token = localStorage.getItem('token');
     $.ajax({
-      url: '/users',
+      url: "/users",
       method: "GET",
       beforeSend: function beforeSend(jqXHR) {
-        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+        if (token) return jqXHR.setRequestHeader('Authorization', "Bearer " + token);
       }
     }).done(showUsers).fail(showLoginForm);
   }
@@ -192,7 +326,7 @@ $(function () {
   function showUsers(users) {
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.firstName + '</h4>\n            </div>\n          </div>\n          <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n          <button class="edit" data-id="' + user._id + '">Edit</button>\n          <button class="dateButton" data-id="' + user._id + '" data-lat="' + user.lat + '" data-lng="' + user.lng + '">Date</button>\n        </div>\n        ');
+      $row.append("\n        <div class=\"col-md-4\">\n          <div class=\"card\">\n            <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n            <div class=\"card-block\">\n              <h4 class=\"card-title\">" + user.firstName + "</h4>\n            </div>\n          </div>\n          <!-- <button class=\"danger delete\" data-id=\"" + user._id + "\">Delete</button> -->\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n        </div>\n        ");
     });
     $main.html($row);
   }
@@ -201,10 +335,10 @@ $(function () {
     var id = $(this).data('id');
     var token = localStorage.getItem('token');
     $.ajax({
-      url: '/users/' + id,
+      url: "/users/" + id,
       method: "GET",
       beforeSend: function beforeSend(jqXHR) {
-        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+        if (token) return jqXHR.setRequestHeader('Authorization', "Bearer " + token);
       }
     }).done(showEditForm).fail(showLoginForm);
   }
@@ -212,17 +346,17 @@ $(function () {
   function showEditForm(user) {
     if (event) event.preventDefault();
     console.log(user);
-    $main.html('\n      <h2>Edit User</h2>\n      <form method="put" action="/users/' + user._id + '">\n      <div class="form-group">\n      <input class="form-control" name="firstName" placeholder="Firstname" value="' + user.firstName + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="lastName" placeholder="Last Name" value="' + user.lastName + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="email" placeholder="Email" value="' + user.email + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="age" placeholder="Age e.g 21" value="' + user.age + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="gender" placeholder="Male or Female?" value="' + user.gender + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="interestedIn" placeholder="Men, Women, or Both?" value="' + user.interestedIn + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="postcode" placeholder="Postcode" value="' + user.postcode + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="fact" placeholder="Tell us a quick fact about yourself!" value="' + user.fact + '">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="profilePic" placeholder="Image Url" value="' + user.profilePic + '">\n      </div>\n      <button class="btn btn-primary">Update</button>\n      </form>\n      ');
+    $main.html("\n      <h2>Edit User</h2>\n      <form method=\"put\" action=\"/users/" + user._id + "\">\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"firstName\" placeholder=\"Firstname\" value=\"" + user.firstName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"lastName\" placeholder=\"Last Name\" value=\"" + user.lastName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"email\" placeholder=\"Email\" value=\"" + user.email + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"age\" placeholder=\"Age e.g 21\" value=\"" + user.age + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"gender\" placeholder=\"Male or Female?\" value=\"" + user.gender + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"interestedIn\" placeholder=\"Men, Women, or Both?\" value=\"" + user.interestedIn + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"postcode\" placeholder=\"Postcode\" value=\"" + user.postcode + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"fact\" placeholder=\"Tell us a quick fact about yourself!\" value=\"" + user.fact + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"profilePic\" placeholder=\"Image Url\" value=\"" + user.profilePic + "\">\n      </div>\n      <button class=\"btn btn-primary\">Update</button>\n      </form>\n      ");
   }
 
   function deleteUser() {
     var id = $(this).data('id');
     var token = localStorage.getItem('token');
     $.ajax({
-      url: '/users/' + id,
+      url: "/users/" + id,
       method: "DELETE",
       beforeSend: function beforeSend(jqXHR) {
-        if (token) return jqXHR.setRequestHeader('Authorization', 'Bearer ' + token);
+        if (token) return jqXHR.setRequestHeader('Authorization', "Bearer " + token);
       }
     }).done(getUsers).fail(showLoginForm);
   }
@@ -310,7 +444,7 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: '\n        <img src=' + event.largeimageurl + '>\n        <h2>' + event.description + '</h2></br>\n        <h2>' + event.venue.name + '</h2></br>\n        <h4>' + event.date + '</h4>\n        <p>' + event.venue.address + '</p>\n        <p>' + event.venue.town + '</p>\n        <p>' + event.venue.postcode + '</p>\n        <p>' + event.venue.phone + '</p>\n        <button><a href=' + event.link + ' target="_blank">Get Tickets</a></button>\n        <p>' + event.entryprice + '</p>\n      '
+        content: "\n        <img src=" + event.largeimageurl + ">\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
       });
       _this.infowindow.open(_this.map, marker);
     });

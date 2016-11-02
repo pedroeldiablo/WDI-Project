@@ -35,7 +35,6 @@ router.route('/users/:id')
   .delete(usersController.delete);
 
 router.route('/events')
-  .all(secureRoute)
   .get(skiddleController.index);
 
 module.exports = router;

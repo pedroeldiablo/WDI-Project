@@ -25,7 +25,8 @@ router.route("/login")
   .post(authController.login);
 
 router.route('/users')
-  .get(secureRoute, usersController.index);
+  .all(secureRoute)
+  .get(usersController.index);
 
 router.route('/users/:id')
   .all(secureRoute)
@@ -34,14 +35,7 @@ router.route('/users/:id')
   .delete(usersController.delete);
 
 router.route('/events')
-  // .all(secureRoute)
+  .all(secureRoute)
   .get(skiddleController.index);
-  // .post(eventsController.create);
-
-// router.route('/events/:id')
-  // .all(secureRoute)
-  // .get(eventsController.show);
-  // .put(eventsController.update)
-  // .delete(eventsController.delete);
 
 module.exports = router;

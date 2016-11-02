@@ -346,10 +346,10 @@ $(() => {
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', toggleNav);
 
-  // function isLoggedIn() {
-  //   return !!localStorage.getItem('token');
-  // }
-  //
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
   // if(isLoggedIn()) {
   //   getUsers();
   // } else {
@@ -376,6 +376,7 @@ $(() => {
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
+      if(data.user) localStorage.setItem('userId', data.user._id);
       getUsers ();
         toggleNav();
         }).fail(showLoginForm);
@@ -401,22 +402,42 @@ $(() => {
   }
 
   function showUsers(users) {
+
+    let loggedInUserId = localStorage.getItem('userId');
+
     let $row = $('<div class="row"></div>');
     users.forEach((user) => {
-      $row.append(`
-        <div class="col-md-4">
-        <div class="card">
-        <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-        <div class="card-block">
-        <h4 class="card-title">${user.firstName}</h4>
-        </div>
-        </div>
-        <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
-        <button class="edit" data-id="${user._id}">Edit</button>
-        <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
-        </div>
-        `
-      );
+
+      if(user._id !== loggedInUserId) {
+        $row.append(`
+          <div class="col-md-4">
+          <div class="card">
+          <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
+          <div class="card-block">
+          <h4 class="card-title">${user.firstName}</h4>
+          </div>
+          </div>
+          <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
+          </div>
+          `
+        );
+      } else {
+        $row.append(`
+          <div class="col-md-4">
+          <div class="card">
+          <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
+          <div class="card-block">
+          <h4 class="card-title">${user.firstName}</h4>
+          </div>
+          </div>
+          <button class="danger delete" data-id="${user._id}">Delete</button>
+          <button class="edit" data-id="${user._id}">Edit</button>
+          </div>
+          `
+        );
+      }
+
+
     });
     $main.html($row);
   }

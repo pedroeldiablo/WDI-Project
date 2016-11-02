@@ -277,10 +277,10 @@ $(function () {
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', toggleNav);
 
-  // function isLoggedIn() {
-  //   return !!localStorage.getItem('token');
-  // }
-  //
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
   // if(isLoggedIn()) {
   //   getUsers();
   // } else {
@@ -307,6 +307,7 @@ $(function () {
       }
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
+      if (data.user) localStorage.setItem('userId', data.user._id);
       getUsers();
       toggleNav();
     }).fail(showLoginForm);
@@ -330,9 +331,17 @@ $(function () {
   }
 
   function showUsers(users) {
+
+    var loggedInUserId = localStorage.getItem('userId');
+
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append("\n        <div class=\"col-md-4\">\n        <div class=\"card\">\n        <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n        <div class=\"card-block\">\n        <h4 class=\"card-title\">" + user.firstName + "</h4>\n        </div>\n        </div>\n        <!-- <button class=\"danger delete\" data-id=\"" + user._id + "\">Delete</button> -->\n        <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n        <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n        </div>\n        ");
+
+      if (user._id !== loggedInUserId) {
+        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
+      } else {
+        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"danger delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
+      }
     });
     $main.html($row);
   }

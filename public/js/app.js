@@ -27,7 +27,7 @@ $(function () {
       lng: partnerLng
     };
     createEventRadius(partnerLatLng);
-    getEvents(today, range);
+
     removeCover();
   }
 
@@ -78,7 +78,9 @@ $(function () {
     eventMarkers = [];
   }
 
-  function getEvents(min, max) {
+  function getEvents(min, max, centerLat, centerLng) {
+    console.log(centerLat);
+    console.log(centerLng);
     removeMarkers();
     var minDate = min.toISOString().split('T')[0];
     var maxDate = max.toISOString().split('T')[0];
@@ -87,9 +89,9 @@ $(function () {
     $.ajax({
       url: '/events',
       data: {
-        latitude: 51.5153,
-        longitude: -0.0722,
-        radius: 5,
+        latitude: centerLat,
+        longitude: centerLng,
+        radius: 1,
         limit: 100,
         minDate: minDate,
         maxDate: maxDate
@@ -275,7 +277,8 @@ $(function () {
       });
 
       var centerOfBounds = bounds.getCenter();
-      console.log("centerOfBounds", centerOfBounds);
+      // console.log("centerOfBounds", centerOfBounds);
+      // console.log(this.getCenter());
 
       // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
       // new google.maps.Marker({
@@ -292,13 +295,19 @@ $(function () {
         fillOpacity: 0.35,
         map: map,
         center: centerOfBounds,
-        radius: 1000
+        radius: 1600
       });
       // recenters map on centerOfBounds/date location
       map.panTo(centerOfBounds);
       // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
-      console.log(circle.contains(markers[1].getPosition()));
-      console.log(markers);
+      // console.log(circle.contains(markers[1].getPosition()));
+      // console.log(circle.contains(event[1].getPosition()));
+      // console.log(markers);
+      console.log(today);
+      console.log(range);
+      var centerLat = centerOfBounds.lat();
+      var centerLng = centerOfBounds.lng();
+      getEvents(today, range, centerLat, centerLng);
     });
   }
 

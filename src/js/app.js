@@ -230,7 +230,7 @@ $(() => {
       lng: partnerLng
     };
     createEventRadius(partnerLatLng);
-    getEvents(today, range);
+
     removeCover();
   }
 
@@ -281,7 +281,9 @@ $(() => {
     eventMarkers = [];
   }
 
-  function getEvents(min, max) {
+  function getEvents(min, max, centerLat, centerLng) {
+    console.log(centerLat);
+    console.log(centerLng);
     removeMarkers();
     let minDate = min.toISOString().split('T')[0];
     let maxDate = max.toISOString().split('T')[0];
@@ -290,8 +292,8 @@ $(() => {
     $.ajax({
       url: `/events`,
       data: {
-        latitude: 51.5153,
-        longitude: -0.0722,
+        latitude: centerLat,
+        longitude: centerLng,
         radius: 1,
         limit: 100,
         minDate: minDate,
@@ -542,7 +544,8 @@ $(() => {
         bounds.extend(marker.getPosition());
       });
       let centerOfBounds = bounds.getCenter();
-      console.log("centerOfBounds", centerOfBounds);
+      // console.log("centerOfBounds", centerOfBounds);
+      // console.log(this.getCenter());
 
       new google.maps.Marker({
         map: map,
@@ -558,9 +561,17 @@ $(() => {
         fillOpacity: 0.35,
         map: map,
         center: centerOfBounds,
-        radius: 2000
+        radius: 1600
+
       });
       map.panTo(centerOfBounds);
+
+      console.log(today);
+      console.log(range);
+      let centerLat = centerOfBounds.lat();
+      let centerLng =  centerOfBounds.lng();
+      getEvents(today, range, centerLat, centerLng);
+
     });
   }
 

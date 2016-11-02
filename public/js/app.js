@@ -5,8 +5,8 @@ $(function () {
 
   var today = new Date();
   var dateBounds = new Date(new Date(today).setMonth(today.getMonth() + 1));
-  var range = new Date(new Date(today).setDate(today.getDate() + 7));
   var googleMap = googleMap || {};
+  var range = new Date(new Date(today).setDate(today.getDate() + 2));
 
   createMap();
   dateSlider();
@@ -19,9 +19,16 @@ $(function () {
     zoom: 12
   });
 
-  function dateSetup() {
-    removeCover();
+  function dateSetup(data) {
+    var partnerLat = $(this).data('lat');
+    var partnerLng = $(this).data('lng');
+    var partnerLatLng = {
+      lat: partnerLat,
+      lng: partnerLng
+    };
+    createEventRadius(partnerLatLng);
     getEvents(today, range);
+    removeCover();
   }
 
   function createMap() {
@@ -62,6 +69,13 @@ $(function () {
 
       getEvents(min, max);
     });
+  }
+
+  function removeMarkers() {
+    for (var i = 0; i < eventMarkers.length; i++) {
+      eventMarkers[i].setMap(null);
+    }
+    eventMarkers = [];
   }
 
   function getEvents(min, max) {
@@ -119,13 +133,6 @@ $(function () {
     $('.mainBox').hide();
   }
 
-  function removeMarkers() {
-    for (var i = 0; i < eventMarkers.length; i++) {
-      eventMarkers[i].setMap(null);
-    }
-    eventMarkers = [];
-  }
-
   var $main = $('main');
   var $loginForm = $('nav');
   $main.on('submit', 'form', handleForm);
@@ -145,11 +152,6 @@ $(function () {
   // } else {
   //   showLoginForm();
   // }
-
-  function showRegisterForm() {
-    if (event) event.preventDefault();
-    $main.html('\n      <h2>Create an account</h2>\n      <form method="post" action="/register">\n      <div class="form-group">\n      <input class="form-control" id="firstName" name="firstName" placeholder="First Name">\n      </div>\n      <div class="form-group">\n      <input class="form-control" id="lastName" name="lastName" placeholder="Last Name">\n      </div>\n      <div class="form-group">\n      <input class="form-control" id="email" name="email" placeholder="Email">\n      </div>\n      <div class="form-group">\n      <input class="form-control" id="age" name="age" placeholder="Age e.g 21">\n      </div>\n      <div class="form-group">\n      <input class="form-control" type="password" name="password" placeholder="Password">\n      </div>\n      <div class="form-group">\n      <input class="form-control" type="password" name="passwordConfirmation" placeholder="Reenter password">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="gender" placeholder="Male or Female?">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="interestedIn" placeholder="Looking for?">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="postcode" placeholder="Postcode">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="fact" placeholder="Image Url">\n      </div>\n      <div class="form-group">\n      <input class="form-control" name="profilePic" placeholder="Upload your image here">\n      </div>\n      <button class="btn btn-primary">Register</button>\n      </form>\n      ');
-  }
 
   function showLoginForm() {
     if (event) event.preventDefault();
@@ -190,7 +192,7 @@ $(function () {
   function showUsers(users) {
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append('\n        <div class="col-md-4" id="profile' + user._id + '">\n        <div class="card">\n        <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n        <div class="card-block">\n        <h4 class="card-title">' + user.firstName + '</h4>\n        </div>\n        </div>\n        <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n        <!-- <button class="edit" data-id="' + user._id + '">Edit</button> -->\n        <button class="dateButton" data-id="' + user._id + '">Date</button>\n        </div>\n        ');
+      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.firstName + '</h4>\n            </div>\n          </div>\n          <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n          <button class="edit" data-id="' + user._id + '">Edit</button>\n          <button class="dateButton" data-id="' + user._id + '" data-lat="' + user.lat + '" data-lng="' + user.lng + '">Date</button>\n        </div>\n        ');
     });
     $main.html($row);
   }
@@ -232,67 +234,73 @@ $(function () {
     showLoginForm();
   }
 
-  google.maps.Circle.prototype.contains = function (latLng) {
-    return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
-  };
-
-  var bounds = new google.maps.LatLngBounds();
-  // markers should be an array our dater's locations
-  var markers = [];
-
-  // function createDate() {
-  navigator.geolocation.getCurrentPosition(function (position) {
-    var loctn = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-
+  function createEventRadius(partnerLatLng) {
+    console.log(partnerLatLng);
+    google.maps.Circle.prototype.contains = function (latLng) {
+      return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
     };
+    var bounds = new google.maps.LatLngBounds();
+    // markers should be an array our dater's locations
+    var markers = [];
     // console.log(loctn);
     // set 1st dater location to geolocation pushed to markers array
-    markers.push(new google.maps.Marker({
-      map: map,
-      position: loctn,
-      // position: { lat: 51.55, lng: -0.078 }
 
-      icon: 'images/pinklocationicon.png'
-    }));
-    // preset 2nd dater location pushed to markers array
-    markers.push(new google.maps.Marker({
-      map: map,
-      position: { lat: 51.507, lng: -0.1276 },
-      icon: 'images/hearticon.png'
-    }));
     // sets bounds using markers array. currently two, but would be possible to use any number
-    markers.forEach(function (marker) {
-      bounds.extend(marker.getPosition());
-    });
+
     // finds the middle of the points from the markers array
-    var centerOfBounds = bounds.getCenter();
 
-    // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
-    new google.maps.Marker({
-      map: map,
-      position: centerOfBounds,
-      animation: google.maps.Animation.DROP
-    });
+    // function createDate() {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var loctn = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      // console.log(loctn);
+      // set 1st dater location to geolocation pushed to markers array
+      markers.push(new google.maps.Marker({
+        map: map,
+        position: loctn,
+        // position: { lat: 51.55, lng: -0.078 }
 
-    // adds a translucent circle to the map taking centreOfBounds as it's centre. This could be made adjustable by creating an input for radius
-    var circle = new google.maps.Circle({
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.8,
-      strokeWeight: 2,
-      fillColor: '#FF0000',
-      fillOpacity: 0.35,
-      map: map,
-      center: centerOfBounds,
-      radius: 1000
+        icon: 'images/pinklocationicon.png'
+      }));
+      // preset 2nd dater location pushed to markers array
+      markers.push(new google.maps.Marker({
+        map: map,
+        position: partnerLatLng
+      }));
+      // sets bounds using markers array. currently two, but would be possible to use any number
+      markers.forEach(function (marker) {
+        bounds.extend(marker.getPosition());
+      });
+
+      var centerOfBounds = bounds.getCenter();
+      console.log("centerOfBounds", centerOfBounds);
+
+      // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
+      // new google.maps.Marker({
+      //   map: map,
+      //   position: centerOfBounds,
+      //   animation: google.maps.Animation.DROP
+      // });
+
+      var circle = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: centerOfBounds,
+        radius: 1000
+      });
+      // recenters map on centerOfBounds/date location
+      map.panTo(centerOfBounds);
+      // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
+      console.log(circle.contains(markers[1].getPosition()));
+      console.log(markers);
     });
-    // recenters map on centerOfBounds/date location
-    map.panTo(centerOfBounds);
-    // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
-    console.log(circle.contains(markers[1].getPosition()));
-    console.log(markers);
-  });
+  }
 
   googleMap.addInfoWindowForEvent = function (event, marker) {
     var _this = this;
@@ -302,11 +310,9 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: '\n      <img src=' + event.largeimageurl + '>\n      <h2>' + event.description + '</h2></br>\n      <h2>' + event.venue.name + '</h2></br>\n      <h4>' + event.date + '</h4>\n      <p>' + event.venue.address + '</p>\n      <p>' + event.venue.town + '</p>\n      <p>' + event.venue.postcode + '</p>\n      <p>' + event.venue.phone + '</p>\n      <button><a href=' + event.link + ' target="_blank">Get Tickets</a></button>\n      <p>' + event.entryprice + '</p>\n      '
+        content: '\n        <img src=' + event.largeimageurl + '>\n        <h2>' + event.description + '</h2></br>\n        <h2>' + event.venue.name + '</h2></br>\n        <h4>' + event.date + '</h4>\n        <p>' + event.venue.address + '</p>\n        <p>' + event.venue.town + '</p>\n        <p>' + event.venue.postcode + '</p>\n        <p>' + event.venue.phone + '</p>\n        <button><a href=' + event.link + ' target="_blank">Get Tickets</a></button>\n        <p>' + event.entryprice + '</p>\n      '
       });
       _this.infowindow.open(_this.map, marker);
     });
   };
-
-  // $(googleMap.mapSetup.bind(googleMap));
 });

@@ -6,6 +6,7 @@ $(function () {
   var today = new Date();
   var dateBounds = new Date(new Date(today).setMonth(today.getMonth() + 1));
   var range = new Date(new Date(today).setDate(today.getDate() + 7));
+  var googleMap = googleMap || {};
 
   createMap();
   dateSlider();
@@ -107,6 +108,7 @@ $(function () {
         // animation: google.maps.Animation.DROP,
         map: map
       });
+      googleMap.addInfoWindowForEvent(event, marker);
       eventMarkers.push(marker);
     });
   }
@@ -257,7 +259,8 @@ $(function () {
     // preset 2nd dater location pushed to markers array
     markers.push(new google.maps.Marker({
       map: map,
-      position: { lat: 51.507, lng: -0.1276 }
+      position: { lat: 51.507, lng: -0.1276 },
+      icon: 'images/hearticon.png'
     }));
     // sets bounds using markers array. currently two, but would be possible to use any number
     markers.forEach(function (marker) {
@@ -290,4 +293,20 @@ $(function () {
     console.log(circle.contains(markers[1].getPosition()));
     console.log(markers);
   });
+
+  googleMap.addInfoWindowForEvent = function (event, marker) {
+    var _this = this;
+
+    google.maps.event.addListener(marker, "click", function () {
+      if (_this.infowindow) {
+        _this.infowindow.close();
+      }
+      _this.infowindow = new google.maps.InfoWindow({
+        content: '\n      <img src=' + event.largeimageurl + '>\n      <h2>' + event.description + '</h2></br>\n      <h2>' + event.venue.name + '</h2></br>\n      <h4>' + event.date + '</h4>\n      <p>' + event.venue.address + '</p>\n      <p>' + event.venue.town + '</p>\n      <p>' + event.venue.postcode + '</p>\n      <p>' + event.venue.phone + '</p>\n      <button><a href=' + event.link + ' target="_blank">Get Tickets</a></button>\n      <p>' + event.entryprice + '</p>\n      '
+      });
+      _this.infowindow.open(_this.map, marker);
+    });
+  };
+
+  // $(googleMap.mapSetup.bind(googleMap));
 });

@@ -15,7 +15,211 @@ $(() => {
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12
+    zoom: 12,
+    styles: [
+      {
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.icon",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#bdbdbd"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.business",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#ffffff"
+          }
+        ]
+      },
+      {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#dadada"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#c9c9c9"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      }
+    ]
   });
 
   function dateSetup(data) {
@@ -142,7 +346,7 @@ $(() => {
   $main.on('click', 'button.edit', getUser);
   $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
-  $('.logout').on('click', logout);
+  $('.logOut').on('click', toggleNav);
 
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');
@@ -174,8 +378,14 @@ $(() => {
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      getUsers();
-    }).fail(showLoginForm);
+      getUsers ();
+        toggleNav();
+        }).fail(showLoginForm);
+  }
+
+  function toggleNav() {
+    $('.logOut').toggle();
+    $('.logIn').toggle();
   }
 
   function getUsers() {
@@ -197,15 +407,15 @@ $(() => {
     users.forEach((user) => {
       $row.append(`
         <div class="col-md-4">
-          <div class="card">
-            <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">${user.firstName}</h4>
-            </div>
-          </div>
-          <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
-          <button class="edit" data-id="${user._id}">Edit</button>
-          <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
+        <div class="card">
+        <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
+        <div class="card-block">
+        <h4 class="card-title">${user.firstName}</h4>
+        </div>
+        </div>
+        <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
+        <button class="edit" data-id="${user._id}">Edit</button>
+        <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
         </div>
         `
       );
@@ -280,7 +490,7 @@ $(() => {
     .fail(showLoginForm);
   }
 
-// logs user out by removing local token
+  // logs user out by removing local token
   function logout() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
@@ -293,50 +503,34 @@ $(() => {
       return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
     };
     let bounds = new google.maps.LatLngBounds();
-    // markers should be an array our dater's locations
     let markers = [];
-    // console.log(loctn);
-    // set 1st dater location to geolocation pushed to markers array
-
-    // sets bounds using markers array. currently two, but would be possible to use any number
-
-    // finds the middle of the points from the markers array
-
-    // function createDate() {
     navigator.geolocation.getCurrentPosition(function(position) {
       let loctn = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
-      // console.log(loctn);
-      // set 1st dater location to geolocation pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
-        // position: { lat: 51.55, lng: -0.078 }
 
         icon: 'images/pinklocationicon.png'
       }));
-      // preset 2nd dater location pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng
       }));
-      // sets bounds using markers array. currently two, but would be possible to use any number
       markers.forEach((marker) => {
         bounds.extend(marker.getPosition());
       });
-
       let centerOfBounds = bounds.getCenter();
       // console.log("centerOfBounds", centerOfBounds);
       // console.log(this.getCenter());
 
-      // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
-      // new google.maps.Marker({
-      //   map: map,
-      //   position: centerOfBounds,
-      //   animation: google.maps.Animation.DROP
-      // });
+      new google.maps.Marker({
+        map: map,
+        position: centerOfBounds,
+        animation: google.maps.Animation.DROP
+      });
 
       let circle = new google.maps.Circle({
         strokeColor: '#FF0000',
@@ -347,18 +541,16 @@ $(() => {
         map: map,
         center: centerOfBounds,
         radius: 1600
+
       });
-      // recenters map on centerOfBounds/date location
       map.panTo(centerOfBounds);
-      // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
-      // console.log(circle.contains(markers[1].getPosition()));
-      // console.log(circle.contains(event[1].getPosition()));
-      // console.log(markers);
+
       console.log(today);
       console.log(range);
       let centerLat = centerOfBounds.lat();
       let centerLng =  centerOfBounds.lng();
       getEvents(today, range, centerLat, centerLng);
+
     });
   }
 

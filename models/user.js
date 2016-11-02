@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   gender:  { type: String, required: true },
   interestedIn:  { type: String, required: true },
   postcode:  { type: String, required: true },
-  lat:  { type: Number, required: true },
-  lng:  { type: Number, required: true },
+  lat:  { type: Number },
+  lng:  { type: Number },
   fact:  { type: String, required: true },
   profilePic:  { type: String, required: true },
   passwordHash:  { type: String, required: true },
@@ -62,7 +62,7 @@ userSchema
 
     };
     return returnJson;
-    
+
   }
 });
 

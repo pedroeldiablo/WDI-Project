@@ -275,17 +275,17 @@ $(function () {
   $main.on('click', 'button.edit', getUser);
   $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
-  $('.logout').on('click', logout);
+  $('.logOut').on('click', toggleNav);
 
-  function isLoggedIn() {
-    return !!localStorage.getItem('token');
-  }
-
-  if (isLoggedIn()) {
-    getUsers();
-  } else {
-    showLoginForm();
-  }
+  // function isLoggedIn() {
+  //   return !!localStorage.getItem('token');
+  // }
+  //
+  // if(isLoggedIn()) {
+  //   getUsers();
+  // } else {
+  //   showLoginForm();
+  // }
 
   function showLoginForm() {
     if (event) event.preventDefault();
@@ -308,7 +308,13 @@ $(function () {
     }).done(function (data) {
       if (data.token) localStorage.setItem('token', data.token);
       getUsers();
+      toggleNav();
     }).fail(showLoginForm);
+  }
+
+  function toggleNav() {
+    $('.logOut').toggle();
+    $('.logIn').toggle();
   }
 
   function getUsers() {

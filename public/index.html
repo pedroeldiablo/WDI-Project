@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Sharkopedia</title>
+    <title>Event Cupid</title>
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/iThing.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -15,7 +15,8 @@
   <body>
     <nav class="navbar">
       <div class="container">
-        <div class="collapse navbar-toggleable-xs">
+      <img id="logo" src="./images/logonew.jpg">
+        <div class="logIn">
           <form method="post" action="/login">
             <div class="form-group">
               <input class="form-control" name="email"  id="loginEmail" placeholder="Email">
@@ -25,7 +26,9 @@
             </div>
             <button class="btn btn-primary">Log In</button>
           </form>
+          <div class="userwelcome"></div>
         </div>
+            <button class="logOut" hidden>Log Out</button>
       </div>
     </nav>
     <div id="slider"></div>

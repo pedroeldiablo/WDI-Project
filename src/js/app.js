@@ -3,7 +3,9 @@ $(() => {
 
   let today = new Date();
   let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
+  let googleMap = googleMap || {};
   let range = new Date(new Date(today).setDate(today.getDate()+2));
+
 
   createMap();
   dateSlider();
@@ -13,7 +15,211 @@ $(() => {
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12
+    zoom: 12,
+    styles: [
+      {
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.icon",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#bdbdbd"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.business",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#ffffff"
+          }
+        ]
+      },
+      {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#dadada"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#c9c9c9"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      }
+    ]
   });
 
   function dateSetup(data) {
@@ -68,6 +274,13 @@ $(() => {
     });
   }
 
+  function removeMarkers(){
+    for (var i = 0; i < eventMarkers.length; i++) {
+      eventMarkers[i].setMap(null);
+    }
+    eventMarkers = [];
+  }
+
   function getEvents(min, max) {
     removeMarkers();
     let minDate = min.toISOString().split('T')[0];
@@ -112,6 +325,7 @@ $(() => {
         // animation: google.maps.Animation.DROP,
         map
       });
+      googleMap.addInfoWindowForEvent(event, marker);
       eventMarkers.push(marker);
     });
   }
@@ -122,13 +336,6 @@ $(() => {
     $('.mainBox').hide();
   }
 
-  function removeMarkers(){
-    for (var i = 0; i < eventMarkers.length; i++) {
-      eventMarkers[i].setMap(null);
-    }
-    eventMarkers = [];
-  }
-
   let $main = $('main');
   let $loginForm = $('nav');
   $main.on('submit', 'form', handleForm);
@@ -137,7 +344,7 @@ $(() => {
   $main.on('click', 'button.edit', getUser);
   $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
-  $('.logout').on('click', logout);
+  $('.logOut').on('click', toggleNav);
 
   // function isLoggedIn() {
   //   return !!localStorage.getItem('token');
@@ -169,8 +376,14 @@ $(() => {
       }
     }).done((data) => {
       if(data.token) localStorage.setItem('token', data.token);
-      getUsers();
-    }).fail(showLoginForm);
+      getUsers ();
+        toggleNav();
+        }).fail(showLoginForm);
+  }
+
+  function toggleNav() {
+    $('.logOut').toggle();
+    $('.logIn').toggle();
   }
 
   function getUsers() {
@@ -287,10 +500,8 @@ $(() => {
     google.maps.Circle.prototype.contains = function(latLng) {
       return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
     };
-
     let bounds = new google.maps.LatLngBounds();
     let markers = [];
-
     navigator.geolocation.getCurrentPosition(function(position) {
       let loctn = {
         lat: position.coords.latitude,
@@ -310,6 +521,7 @@ $(() => {
         bounds.extend(marker.getPosition());
       });
       let centerOfBounds = bounds.getCenter();
+      console.log("centerOfBounds", centerOfBounds);
 
       new google.maps.Marker({
         map: map,
@@ -330,4 +542,27 @@ $(() => {
       map.panTo(centerOfBounds);
     });
   }
+
+  googleMap.addInfoWindowForEvent = function (event, marker) {
+  google.maps.event.addListener(marker, "click", () => {
+    if (this.infowindow){
+      this.infowindow.close();
+    }
+    this.infowindow = new google.maps.InfoWindow({
+      content: `
+        <img src=${event.largeimageurl}>
+        <h2>${event.description}</h2></br>
+        <h2>${event.venue.name}</h2></br>
+        <h4>${event.date}</h4>
+        <p>${event.venue.address}</p>
+        <p>${event.venue.town}</p>
+        <p>${event.venue.postcode}</p>
+        <p>${event.venue.phone}</p>
+        <button><a href=${event.link} target="_blank">Get Tickets</a></button>
+        <p>${event.entryprice}</p>
+      `
+      });
+      this.infowindow.open(this.map, marker);
+    });
+  };
 });

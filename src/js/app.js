@@ -3,7 +3,7 @@ $(() => {
 
   let today = new Date();
   let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
-  let range = new Date(new Date(today).setDate(today.getDate()+7));
+  let range = new Date(new Date(today).setDate(today.getDate()+2));
 
   createMap();
   dateSlider();

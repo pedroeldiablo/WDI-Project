@@ -346,7 +346,7 @@ $(() => {
   $main.on('click', 'button.edit', getUser);
   $main.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
-  $('.logOut').on('click', toggleNav);
+  $('.logOut').on('click', logout);
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -511,11 +511,11 @@ $(() => {
     .fail(showLoginForm);
   }
 
-  // logs user out by removing local token
   function logout() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
-    showLoginForm();
+    localStorage.removeItem('userId');
+    location.reload();
   }
 
   function createEventRadius(partnerLatLng){
@@ -561,7 +561,7 @@ $(() => {
         fillOpacity: 0.35,
         map: map,
         center: centerOfBounds,
-        radius: 1600
+        radius: 1950
 
       });
       map.panTo(centerOfBounds);

@@ -15,7 +15,7 @@ function eventsIndex(req, res) {
 // }
 
 function eventsShow(req, res) {
-  Shark.findById(req.params.id, (err, event) => {
+  Event.findById(req.params.id, (err, event) => {
     if(err) return res.status(500).json({ error: "500: Server Error"});
     res.json(event);
   });

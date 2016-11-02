@@ -5,7 +5,7 @@ $(function () {
 
   var today = new Date();
   var dateBounds = new Date(new Date(today).setMonth(today.getMonth() + 1));
-  var range = new Date(new Date(today).setDate(today.getDate() + 7));
+  var range = new Date(new Date(today).setDate(today.getDate() + 2));
 
   createMap();
   dateSlider();

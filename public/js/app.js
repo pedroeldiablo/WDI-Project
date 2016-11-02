@@ -81,7 +81,7 @@ $(function () {
       data: {
         latitude: 51.5153,
         longitude: -0.0722,
-        radius: 5,
+        radius: 1,
         limit: 100,
         minDate: minDate,
         maxDate: maxDate
@@ -190,7 +190,7 @@ $(function () {
   function showUsers(users) {
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
-      $row.append('\n        <div class="col-md-4">\n          <div class="card">\n            <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n            <div class="card-block">\n              <h4 class="card-title">' + user.firstName + '</h4>\n            </div>\n          </div>\n          <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n          <button class="edit" data-id="' + user._id + '">Edit</button>\n          <button class="dateButton" data-id="' + user._id + '" data-lat="' + user.lat + '" data-lng="' + user.lng + '">Date</button>\n        </div>\n        ');
+      $row.append('\n        <div class="col-md-4">\n        <div class="card">\n        <img class="card-img-top" src="' + user.profilePic + '" alt="Card image cap">\n        <div class="card-block">\n        <h4 class="card-title">' + user.firstName + '</h4>\n        </div>\n        </div>\n        <!-- <button class="danger delete" data-id="' + user._id + '">Delete</button> -->\n        <button class="edit" data-id="' + user._id + '">Edit</button>\n        <button class="dateButton" data-id="' + user._id + '" data-lat="' + user.lat + '" data-lng="' + user.lng + '">Date</button>\n        </div>\n        ');
     });
     $main.html($row);
   }
@@ -239,44 +239,34 @@ $(function () {
     };
 
     var bounds = new google.maps.LatLngBounds();
-    // markers should be an array our dater's locations
     var markers = [];
 
-    // function createDate() {
     navigator.geolocation.getCurrentPosition(function (position) {
       var loctn = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-      // console.log(loctn);
-      // set 1st dater location to geolocation pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
-        // position: { lat: 51.55, lng: -0.078 }
 
         icon: 'images/pinklocationicon.png'
       }));
-      // preset 2nd dater location pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng
       }));
-      // sets bounds using markers array. currently two, but would be possible to use any number
       markers.forEach(function (marker) {
         bounds.extend(marker.getPosition());
       });
-      // finds the middle of the points from the markers array
       var centerOfBounds = bounds.getCenter();
 
-      // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
       new google.maps.Marker({
         map: map,
         position: centerOfBounds,
         animation: google.maps.Animation.DROP
       });
 
-      // adds a translucent circle to the map taking centreOfBounds as it's centre. This could be made adjustable by creating an input for radius
       var circle = new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
@@ -285,13 +275,9 @@ $(function () {
         fillOpacity: 0.35,
         map: map,
         center: centerOfBounds,
-        radius: 1000
+        radius: 2000
       });
-      // recenters map on centerOfBounds/date location
       map.panTo(centerOfBounds);
-      // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
-      // console.log(circle.contains(markers[1].getPosition()));
-      // console.log(markers);
     });
   }
 });

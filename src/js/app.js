@@ -79,7 +79,7 @@ $(() => {
       data: {
         latitude: 51.5153,
         longitude: -0.0722,
-        radius: 5,
+        radius: 1,
         limit: 100,
         minDate: minDate,
         maxDate: maxDate
@@ -192,15 +192,15 @@ $(() => {
     users.forEach((user) => {
       $row.append(`
         <div class="col-md-4">
-          <div class="card">
-            <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">${user.firstName}</h4>
-            </div>
-          </div>
-          <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
-          <button class="edit" data-id="${user._id}">Edit</button>
-          <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
+        <div class="card">
+        <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
+        <div class="card-block">
+        <h4 class="card-title">${user.firstName}</h4>
+        </div>
+        </div>
+        <!-- <button class="danger delete" data-id="${user._id}">Delete</button> -->
+        <button class="edit" data-id="${user._id}">Edit</button>
+        <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
         </div>
         `
       );
@@ -275,7 +275,7 @@ $(() => {
     .fail(showLoginForm);
   }
 
-// logs user out by removing local token
+  // logs user out by removing local token
   function logout() {
     if(event) event.preventDefault();
     localStorage.removeItem('token');
@@ -289,59 +289,45 @@ $(() => {
     };
 
     let bounds = new google.maps.LatLngBounds();
-  // markers should be an array our dater's locations
     let markers = [];
 
-    // function createDate() {
     navigator.geolocation.getCurrentPosition(function(position) {
       let loctn = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
-      // console.log(loctn);
-  // set 1st dater location to geolocation pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
-        // position: { lat: 51.55, lng: -0.078 }
 
         icon: 'images/pinklocationicon.png'
       }));
-    // preset 2nd dater location pushed to markers array
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng
       }));
-      // sets bounds using markers array. currently two, but would be possible to use any number
       markers.forEach((marker) => {
         bounds.extend(marker.getPosition());
       });
-      // finds the middle of the points from the markers array
-        let centerOfBounds = bounds.getCenter();
+      let centerOfBounds = bounds.getCenter();
 
-      // adds a marker at the centerOfBounds latlng uses drop animation to indicate this
-        new google.maps.Marker({
-          map: map,
-          position: centerOfBounds,
-          animation: google.maps.Animation.DROP
-        });
+      new google.maps.Marker({
+        map: map,
+        position: centerOfBounds,
+        animation: google.maps.Animation.DROP
+      });
 
-      // adds a translucent circle to the map taking centreOfBounds as it's centre. This could be made adjustable by creating an input for radius
-        let circle = new google.maps.Circle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map: map,
-          center: centerOfBounds,
-          radius: 1000
-        });
-  // recenters map on centerOfBounds/date location
-        map.panTo(centerOfBounds);
-      // circle.contains(markers[1].getPosition()); this returns true of false based on whether this marker falls with the radius for the circle. If we apply this to the events with a forEach we will be able to define which events show on map.
-        // console.log(circle.contains(markers[1].getPosition()));
-        // console.log(markers);
+      let circle = new google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: centerOfBounds,
+        radius: 2000
+      });
+      map.panTo(centerOfBounds);
     });
   }
 });

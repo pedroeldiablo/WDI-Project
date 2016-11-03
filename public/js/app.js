@@ -164,9 +164,15 @@ $(function () {
       lat: partnerLat,
       lng: partnerLng
     };
+    var partnerImg = $(this).data('img');
     createEventRadius(partnerLatLng);
-
+    setDatePic(partnerImg);
     removeCover();
+  }
+
+  function setDatePic(partnerImg) {
+    console.log(partnerImg);
+    $('.datePic').css('background-image', 'url(' + partnerImg + ')');
   }
 
   function createMap() {
@@ -341,7 +347,7 @@ $(function () {
     users.forEach(function (user) {
 
       if (user._id !== loggedInUserId) {
-        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
+        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-img=\"" + user.profilePic + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
       } else {
         $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"danger delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
       }

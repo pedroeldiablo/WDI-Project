@@ -98,3 +98,14 @@ button {
   border-radius: 5px;
   text-align: center;
 }
+
+.datePic {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  top: 17px;
+  right: 2%;
+  border-radius: 50%;
+  border: 1px grey solid;
+  background-size: cover;
+}

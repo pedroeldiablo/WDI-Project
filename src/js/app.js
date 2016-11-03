@@ -232,9 +232,15 @@ $(() => {
       lat: partnerLat,
       lng: partnerLng
     };
+    let partnerImg = $(this).data('img');
     createEventRadius(partnerLatLng);
-
+    setDatePic(partnerImg);
     removeCover();
+  }
+
+  function setDatePic(partnerImg) {
+    console.log(partnerImg);
+    $('.datePic').css('background-image', 'url(' + partnerImg + ')');
   }
 
   function createMap() {
@@ -419,7 +425,7 @@ $(() => {
           <h4 class="card-title">${user.firstName}</h4>
           </div>
           </div>
-          <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
+          <button class="dateButton" data-id="${user._id}" data-img="${user.profilePic}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
           </div>
           `
         );

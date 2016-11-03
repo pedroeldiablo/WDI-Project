@@ -577,7 +577,7 @@ $(() => {
         fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
-        radius: 2082
+        radius: 2110
       }));
 
       map.panTo(centerOfBounds);

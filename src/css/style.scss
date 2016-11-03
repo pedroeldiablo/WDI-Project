@@ -9,6 +9,14 @@ $secondbrand: #333;
 
 img{ max-width: 100%;}
 
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 22px;
+}
+
 
 body {
   color: $primarybrand;
@@ -59,6 +67,7 @@ body {
   height: calc(100vh - 98px);
   float: left;
 }
+
 .sidebar{
   width: 30%;
   height: calc(100vh - 98px);
@@ -109,7 +118,7 @@ body {
   display: block;
   width: 100vw;
   height: calc(100vh - 68px);
-  background-image: url('../images/smilling.png');
+  background-image: url('../images/smiling.png');
   background-size: cover;
   color: white;
   position: absolute;
@@ -138,8 +147,27 @@ main {
   padding: 20px;
 }
 
-h2 {
-  font-size: 22px;
+.about {
+  box-sizing: border-box;
+  padding: 20px;
+  float: right;
+  display: block;
+  width: 70%;
+  background-color: white;
+  position: absolute;
+  top: 15%;
+  border-radius: 10px;
+  // left: calc(50% - 350px);
+  opacity: 1;
+  z-index: 101;
+}
+
+
+
+.row {
+  h4{
+    color: $secondbrand;
+  }
 }
 
 // #firstName {
@@ -189,4 +217,61 @@ button {
 
 #slider {
   clear: both;
+}
+
+// #slider > div.ui-rangeSlider-label.ui-rangeSlider-rightLabel > div.ui-rangeSlider-label-value
+.ui-rangeSlider-label-value{
+  background-color:$primarybrand;
+  font-family: $font-stack;
+}
+
+.ui-rangeSlider-label.ui-rangeSlider-rightLabel{
+  background-color:$primarybrand;
+}
+
+.ui-rangeSlider-innerBar {
+  background-color:lighten($secondbrand, 80%);
+}
+
+.ui-rangeSlider-bar {
+  background-color:$primarybrand;
+}
+
+.ui-rangeSlider-arrow.ui-rangeSlider-leftArrow{
+  background-color:$primarybrand;
+}
+
+.ui-rangeSlider-arrow.ui-rangeSlider-rightArrow{
+  background-color:$primarybrand;
+}
+
+@media only screen and (max-width: 700px) {
+  // .mainBox {
+  //   width:100%;
+  // }
+  .sidebar {
+      width:50%;
+  }
+}
+
+
+@media only screen and (max-width: 500px) {
+  .sidebar {
+      width:100%;
+  }
+  .about {
+    width:100%;
+  }
+  .mainBox {
+    width:100%;
+  }
+  .navbar {
+    img{
+      &#logo {
+        width: 200px;
+        display: inline;
+        float: left;
+      }
+    }
+  }
 }

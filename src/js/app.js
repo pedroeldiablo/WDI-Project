@@ -424,12 +424,12 @@ $(() => {
       if(user._id !== loggedInUserId) {
         $row.append(`
           <div class="user-profile">
-          <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-          <h4 class="card-title">${user.firstName}</h4>
-          <h4 class="card-title">${user.age}</h4>
-          <h4 class="card-title">${user.fact}</h4>
-          <h4 class="card-title">${user.gender}</h4>
-          <h4 class="card-title">${user.interestedIn}</h4>
+          <img class="card-img-top" src="${user.profilePic}" alt="Card image cap"></br>
+          <h2 class="card-title">${user.firstName}</h2></br>
+          <h4 class="card-title">${user.gender}</h4></br>
+          <h2 class="card-title">${user.age}</h2></br>
+          <h4 class="card-title">Fun Fact: ${user.fact}</h4></br>
+          <h4 class="card-title">Interested In: ${user.interestedIn}</h4></br>
           <button class="dateButton" data-id="${user._id}" data-img="${user.profilePic}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
           </div>
           `
@@ -438,7 +438,7 @@ $(() => {
         $row.prepend(`
           <div class="user-profile user">
           <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-          <h4 class="card-title">${user.firstName}</h4>
+          <h2 class="card-title">${user.firstName}</h2>
           <button class="delete" data-id="${user._id}">Delete</button>
           <button class="edit" data-id="${user._id}">Edit</button>
           </div>

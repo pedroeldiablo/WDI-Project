@@ -35,7 +35,7 @@ $(function () {
 
   var map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12,
+    zoom: 14,
     styles: [{
       "elementType": "geometry",
       "stylers": [{
@@ -471,7 +471,7 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: "\n        <img src=" + event.largeimageurl + " onerror=\"this.src='../images/noimage.jpg'\">\n        <h2>" + event.eventname + "</h2><br>\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
+        content: "\n        <div class=\"eventInfoBox\">\n          <img src=" + event.largeimageurl + " onerror=\"this.src='../images/noimage.jpg'\">\n          <div class=\"content\">\n            <h2><strong>" + event.eventname + "</strong></h2><br>\n            <h4>" + event.description + "</h4></br>\n            <h3>" + event.venue.name + "</h3>\n            <p>" + event.date + "</p>\n            <p>" + event.venue.address + "</p>\n            <p>" + event.venue.town + "</p>\n            <p>" + event.venue.postcode + "</p>\n            <p>" + event.venue.phone + "</p>\n            <a href=" + event.link + " target=\"_blank\">Get Tickets</a>\n          </div>\n        </div>\n      "
       });
       _this.infowindow.open(_this.map, marker);
     });

@@ -35,7 +35,7 @@ $(() => {
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12,
+    zoom: 14,
     styles: [
       {
         "elementType": "geometry",
@@ -599,17 +599,20 @@ $(() => {
     }
     this.infowindow = new google.maps.InfoWindow({
       content: `
-        <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
-        <h2>${event.eventname}</h2><br>
-        <h2>${event.description}</h2></br>
-        <h2>${event.venue.name}</h2></br>
-        <h4>${event.date}</h4>
-        <p>${event.venue.address}</p>
-        <p>${event.venue.town}</p>
-        <p>${event.venue.postcode}</p>
-        <p>${event.venue.phone}</p>
-        <button><a href=${event.link} target="_blank">Get Tickets</a></button>
-        <p>${event.entryprice}</p>
+        <div class="eventInfoBox">
+          <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
+          <div class="content">
+            <h2><strong>${event.eventname}</strong></h2><br>
+            <h4>${event.description}</h4></br>
+            <h3>${event.venue.name}</h3>
+            <p>${event.date}</p>
+            <p>${event.venue.address}</p>
+            <p>${event.venue.town}</p>
+            <p>${event.venue.postcode}</p>
+            <p>${event.venue.phone}</p>
+            <a href=${event.link} target="_blank">Get Tickets</a>
+          </div>
+        </div>
       `
       });
       this.infowindow.open(this.map, marker);

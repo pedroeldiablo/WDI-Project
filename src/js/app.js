@@ -5,6 +5,17 @@ $(() => {
   let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
   let googleMap = googleMap || {};
   let range = new Date(new Date(today).setDate(today.getDate()+2));
+  let $main = $('main');
+  let $sidebar =$(".sidebar");
+  let $loginForm = $('nav');
+  $main.on('submit', 'form', handleForm);
+  $loginForm.on('submit', 'form', handleForm);
+  $sidebar.on('click', 'button.delete', deleteUser);
+  $sidebar.on('click', 'button.edit', getUser);
+  $sidebar.on('click', 'button.dateButton', dateSetup);
+  $('.usersIndex').on('click', getUsers);
+  $('.logOut').on('click', logout);
+
 
 
   createMap();
@@ -230,8 +241,6 @@ $(() => {
       lng: partnerLng
     };
     createEventRadius(partnerLatLng);
-
-    removeCover();
   }
 
   function createMap() {
@@ -338,25 +347,17 @@ $(() => {
     $('.mainBox').hide();
   }
 
-  let $main = $('main');
-  let $loginForm = $('nav');
-  $main.on('submit', 'form', handleForm);
-  $loginForm.on('submit', 'form', handleForm);
-  $main.on('click', 'button.delete', deleteUser);
-  $main.on('click', 'button.edit', getUser);
-  $main.on('click', 'button.dateButton', dateSetup);
-  $('.usersIndex').on('click', getUsers);
-  $('.logOut').on('click', logout);
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
 
-  // if(isLoggedIn()) {
-  //   getUsers();
-  // } else {
-  //   showLoginForm();
-  // }
+  if(isLoggedIn()) {
+    getUsers();
+    toggleNav();
+  } else {
+    // showLoginForm();
+  }
 
   function showLoginForm() {
     if(event) event.preventDefault();
@@ -404,7 +405,7 @@ $(() => {
   }
 
   function showUsers(users) {
-
+    removeCover();
     let loggedInUserId = localStorage.getItem('userId');
 
     let $row = $('<div class="row"></div>');
@@ -412,27 +413,23 @@ $(() => {
 
       if(user._id !== loggedInUserId) {
         $row.append(`
-          <div class="col-md-4">
-          <div class="card">
+          <div class="user-profile">
           <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-          <div class="card-block">
           <h4 class="card-title">${user.firstName}</h4>
-          </div>
-          </div>
+          <h4 class="card-title">${user.age}</h4>
+          <h4 class="card-title">${user.fact}</h4>
+          <h4 class="card-title">${user.gender}</h4>
+          <h4 class="card-title">${user.interestedIn}</h4>
           <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
           </div>
           `
         );
       } else {
         $row.append(`
-          <div class="col-md-4">
-          <div class="card">
+          <div class="user-profile">
           <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
-          <div class="card-block">
           <h4 class="card-title">${user.firstName}</h4>
-          </div>
-          </div>
-          <button class="danger delete" data-id="${user._id}">Delete</button>
+          <button class="delete" data-id="${user._id}">Delete</button>
           <button class="edit" data-id="${user._id}">Edit</button>
           </div>
           `
@@ -441,7 +438,7 @@ $(() => {
 
 
     });
-    $main.html($row);
+    $(".sidebar").html($row);
   }
 
   function getUser() {

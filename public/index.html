@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/iThing.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWU2hcIM0O2y4pK1EPDhP-mJ_AshrCiTE&libraries=geometry" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -15,7 +16,8 @@
   <body>
     <nav class="navbar">
       <div class="container">
-      <img id="logo" src="./images/logonew.jpg">
+        <img id="logo" src="./images/logonew.jpg">
+        <div class="userwelcome"></div>
         <div class="logIn">
           <form class="loginForm" method="post" action="/login">
             <div class="form-group">
@@ -26,12 +28,13 @@
             </div>
             <button class="btn btn-primary">Log In</button>
           </form>
-          <div class="userwelcome"></div>
         </div>
-            <button class="logOut" hidden>Log Out</button>
+        <button class="logOut" hidden>Log Out</button>
       </div>
     </nav>
     <div class="content">
+      <div class="sidebar">
+      </div>
       <div id="map"></div>
       <div class="mapCover"></div>
       <div class="mainBox">

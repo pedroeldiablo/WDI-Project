@@ -1,18 +1,68 @@
+$font-stack: 'Raleway', sans-serif;
+$primarybrand: #ed0c19;
+$secondbrand: #333;
+
+
+img{ max-width: 100%;}
+
+
 body {
-  color: #ED145A;
-}
-#logo {
-  width: 350px;
-  display: inline;
-  float: left;
-  padding: 3px;
+  color: $primarybrand;
+  font-family: $font-stack;
 }
 
+
+
+.navbar{
+  .container{
+    img{
+      &#logo {
+        width: 350px;
+        display: inline;
+        float: left;
+        padding: 3px;
+      }
+    }
+    .userwelcome{}
+    .logIn{
+      form{
+        .loginForm{
+          .form-group{
+            .form-control{}
+            .form-group{}
+            .form-control{}
+            .btn{
+              &.btn-primary{}
+            }
+          }
+        }
+      }
+    }
+    .logOut{}
+
+  }
+}
 #map{
-  width: 100vw;
+  width: 70%;
   height: calc(100vh - 100px);
+  float: left;
 }
-
+.sidebar{
+  width: 30%;
+  height: calc(100vh - 100px);
+  float: left;
+  background-color: #333;
+  overflow: scroll;
+  .user-profile{
+    background-color: white;
+    padding: 20px;
+    margin: 10px 10px 0;
+    word-break: break-all;
+    img{
+      margin-bottom: 10px;
+    }
+  }
+}
 .navbar {
   display: inline;
   font-size: 68px;
@@ -97,4 +147,6 @@ button {
   background-color: #ffffff;
   border-radius: 5px;
   text-align: center;
+  font-family: $font-stack;
+
 }

@@ -7,6 +7,16 @@ $(function () {
   var dateBounds = new Date(new Date(today).setMonth(today.getMonth() + 1));
   var googleMap = googleMap || {};
   var range = new Date(new Date(today).setDate(today.getDate() + 2));
+  var $main = $('main');
+  var $sidebar = $(".sidebar");
+  var $loginForm = $('nav');
+  $main.on('submit', 'form', handleForm);
+  $loginForm.on('submit', 'form', handleForm);
+  $sidebar.on('click', 'button.delete', deleteUser);
+  $sidebar.on('click', 'button.edit', getUser);
+  $sidebar.on('click', 'button.dateButton', dateSetup);
+  $('.usersIndex').on('click', getUsers);
+  $('.logOut').on('click', logout);
 
   createMap();
   dateSlider();
@@ -161,8 +171,6 @@ $(function () {
       lng: partnerLng
     };
     createEventRadius(partnerLatLng);
-
-    removeCover();
   }
 
   function createMap() {
@@ -269,25 +277,16 @@ $(function () {
     $('.mainBox').hide();
   }
 
-  var $main = $('main');
-  var $loginForm = $('nav');
-  $main.on('submit', 'form', handleForm);
-  $loginForm.on('submit', 'form', handleForm);
-  $main.on('click', 'button.delete', deleteUser);
-  $main.on('click', 'button.edit', getUser);
-  $main.on('click', 'button.dateButton', dateSetup);
-  $('.usersIndex').on('click', getUsers);
-  $('.logOut').on('click', logout);
-
   function isLoggedIn() {
     return !!localStorage.getItem('token');
   }
 
-  // if(isLoggedIn()) {
-  //   getUsers();
-  // } else {
-  //   showLoginForm();
-  // }
+  if (isLoggedIn()) {
+    getUsers();
+    toggleNav();
+  } else {
+    // showLoginForm();
+  }
 
   function showLoginForm() {
     if (event) event.preventDefault();
@@ -333,19 +332,19 @@ $(function () {
   }
 
   function showUsers(users) {
-
+    removeCover();
     var loggedInUserId = localStorage.getItem('userId');
 
     var $row = $('<div class="row"></div>');
     users.forEach(function (user) {
 
       if (user._id !== loggedInUserId) {
-        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
+        $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <h4 class=\"card-title\">" + user.age + "</h4>\n          <h4 class=\"card-title\">" + user.fact + "</h4>\n          <h4 class=\"card-title\">" + user.gender + "</h4>\n          <h4 class=\"card-title\">" + user.interestedIn + "</h4>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
       } else {
-        $row.append("\n          <div class=\"col-md-4\">\n          <div class=\"card\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <div class=\"card-block\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          </div>\n          </div>\n          <button class=\"danger delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
+        $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <button class=\"delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
       }
     });
-    $main.html($row);
+    $(".sidebar").html($row);
   }
 
   function getUser() {

@@ -241,6 +241,7 @@ $(() => {
   function setDatePic(partnerImg) {
     console.log(partnerImg);
     $('.datePic').css('background-image', 'url(' + partnerImg + ')');
+    $('.datePic').css('border', '2px solid grey');
   }
 
   function createMap() {

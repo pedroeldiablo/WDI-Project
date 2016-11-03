@@ -9,6 +9,7 @@ $(() => {
   let $sidebar =$(".sidebar");
   let $loginForm = $('nav');
   $main.on('submit', 'form', handleForm);
+  $sidebar.on('submit', 'form', handleForm);
   $loginForm.on('submit', 'form', handleForm);
   $sidebar.on('click', 'button.delete', deleteUser);
   $sidebar.on('click', 'button.edit', getUser);
@@ -391,8 +392,10 @@ $(() => {
       if(data.token) localStorage.setItem('token', data.token);
       if(data.user) localStorage.setItem('userId', data.user._id);
       getUsers ();
+      if (url === "/login" || url === "/register"){
         toggleNav();
-        }).fail(showLoginForm);
+      }
+    }).fail(showLoginForm);
   }
 
   function toggleNav() {
@@ -435,8 +438,8 @@ $(() => {
           `
         );
       } else {
-        $row.append(`
-          <div class="user-profile">
+        $row.prepend(`
+          <div class="user-profile user">
           <img class="card-img-top" src="${user.profilePic}" alt="Card image cap">
           <h4 class="card-title">${user.firstName}</h4>
           <button class="delete" data-id="${user._id}">Delete</button>
@@ -472,8 +475,8 @@ $(() => {
   function showEditForm(user) {
     if(event) event.preventDefault();
     console.log(user);
-    $main.html(`
-      <h2>Edit User</h2>
+    $sidebar.html(`
+      <h2>Edit Profile</h2>
       <form method="put" action="/users/${user._id}">
       <div class="form-group">
       <input class="form-control" name="firstName" placeholder="Firstname" value="${user.firstName}">
@@ -545,11 +548,12 @@ $(() => {
         map: map,
         position: loctn,
 
-        icon: 'images/pinklocationicon.png'
+        icon: 'images/hearticon.png'
       }));
       markers.push(new google.maps.Marker({
         map: map,
-        position: partnerLatLng
+        position: partnerLatLng,
+        icon: 'images/hearticon.png'
       }));
       markers.forEach((marker) => {
         bounds.extend(marker.getPosition());
@@ -594,6 +598,7 @@ $(() => {
     this.infowindow = new google.maps.InfoWindow({
       content: `
         <img src=${event.largeimageurl}>
+        <h2>${event.eventname}</h2><br>
         <h2>${event.description}</h2></br>
         <h2>${event.venue.name}</h2></br>
         <h4>${event.date}</h4>

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/iThing.css">
     <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWU2hcIM0O2y4pK1EPDhP-mJ_AshrCiTE&libraries=geometry" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -15,22 +15,22 @@
   </head>
   <body>
     <nav class="navbar">
-      <div class="container">
-        <img id="logo" src="./images/logonew.jpg">
-        <div class="userwelcome"></div>
-        <div class="logIn">
-          <form class="loginForm" method="post" action="/login">
-            <div class="form-group">
-              <input class="form-control" name="email"  id="loginEmail" placeholder="Email">
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="password" name="password" id="loginPassword" placeholder="Password">
-            </div>
+      <img id="logo" src="./images/logonew.jpg">
+      <div class="userwelcome"></div>
+      <div class="logIn">
+        <form class="loginForm" method="post" action="/login">
+          <div class="form-group">
+            <input class="form-control" name="email"  id="loginEmail" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input class="form-control" type="password" name="password" id="loginPassword" placeholder="Password">
+          </div>
+          <div class="form-group">
             <button class="btn btn-primary">Log In</button>
-          </form>
-        </div>
-        <button class="logOut" hidden>Log Out</button>
+          </div>
+        </form>
       </div>
+      <button class="logOut" hidden>Log Out</button>
     </nav>
     <div class="content">
       <div class="sidebar">

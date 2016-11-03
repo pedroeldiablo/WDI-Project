@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const eventSchema = mongoose.Schema({
+  eventname: String,
   description: String,
   date: String,
   largeimageurl: String,

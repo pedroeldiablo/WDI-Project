@@ -2,6 +2,10 @@ $font-stack: 'Raleway', sans-serif;
 $primarybrand: #ed0c19;
 $secondbrand: #333;
 
+* {
+  box-sizing: border-box;
+}
+
 
 img{ max-width: 100%;}
 
@@ -14,32 +18,40 @@ body {
 
 
 .navbar{
-  .container{
-    img{
-      &#logo {
-        width: 350px;
-        display: inline;
-        float: left;
-        padding: 3px;
-      }
+  padding: 10px;
+  overflow: hidden;
+  img{
+    &#logo {
+      width: 350px;
+      display: inline;
+      float: left;
     }
-    .userwelcome{}
-    .logIn{
-      form{
-        .loginForm{
-          .form-group{
-            .form-control{}
-            .form-group{}
-            .form-control{}
-            .btn{
-              &.btn-primary{}
-            }
-          }
+  }
+  .userwelcome{
+
+  }
+  form {
+    &.loginForm{
+      margin-top: 15px;
+      float: right;
+      width: 360px;
+      .form-group{
+        vertical-align: top;
+        input {
+          margin-top: 0;
+        }
+        .form-control{}
+        .form-group{}
+        .form-control{}
+        .btn{
+          &.btn-primary{}
         }
       }
     }
-    .logOut{}
-
+  }
+  .logOut{
+    margin-top: 15px;
+    float: right;
   }
 }
 #map{
@@ -53,19 +65,19 @@ body {
   float: left;
   background-color: #333;
   overflow: scroll;
+  padding: 20px;
   .user-profile{
     background-color: white;
     padding: 20px;
-    margin: 10px 10px 0;
+    margin-bottom: 10px;
     word-break: break-all;
     img{
       margin-bottom: 10px;
     }
   }
-}
-.navbar {
-  display: inline;
-  font-size: 68px;
+  input{
+    margin: 3px 0;
+  }
 }
 
 #loginEmail {
@@ -103,12 +115,13 @@ body {
 .content {
   position: relative;
   overflow: hidden;
+  clear: both;
 }
 
 input {
-  width: 300px;
+  width: 100%;
   border-radius: 4px;
-  border: 1px solid #ffffff;
+  border: 1px solid lighten($secondbrand, 60%);
   padding: 4px 5px;
   margin: 3px 2px;
   float: left;
@@ -123,32 +136,34 @@ h2 {
   font-size: 22px;
 }
 
-#firstName {
-  width: 120px;
-}
-
-#lastName {
-  width: 163px;
-  margin-left: 3px;
-}
-
-#email {
-  width: 263px;
-}
-
-#age {
-  width: 20px;
-  margin-left: 3px;
-}
+// #firstName {
+//   width: 120px;
+// }
+//
+// #lastName {
+//   width: 163px;
+//   margin-left: 3px;
+// }
+//
+// #email {
+//   width: 263px;
+// }
+//
+// #age {
+//   width: 20px;
+//   margin-left: 3px;
+// }
 
 button {
-  padding: 4px 5px;
+  padding: 6px 8px;
   font-size: 12px;
   border: none;
-  background-color: #ffffff;
-  border-radius: 5px;
+  background-color: $primarybrand;
+  color: white;
+  border-radius: 3px;
   text-align: center;
   font-family: $font-stack;
+  font-weight: 700;
 
 }
 

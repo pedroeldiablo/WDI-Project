@@ -11,6 +11,7 @@ $(function () {
   var $sidebar = $(".sidebar");
   var $loginForm = $('nav');
   $main.on('submit', 'form', handleForm);
+  $sidebar.on('submit', 'form', handleForm);
   $loginForm.on('submit', 'form', handleForm);
   $sidebar.on('click', 'button.delete', deleteUser);
   $sidebar.on('click', 'button.edit', getUser);
@@ -321,7 +322,9 @@ $(function () {
       if (data.token) localStorage.setItem('token', data.token);
       if (data.user) localStorage.setItem('userId', data.user._id);
       getUsers();
-      toggleNav();
+      if (url === "/login" || url === "/register") {
+        toggleNav();
+      }
     }).fail(showLoginForm);
   }
 
@@ -352,7 +355,7 @@ $(function () {
       if (user._id !== loggedInUserId) {
         $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <h4 class=\"card-title\">" + user.age + "</h4>\n          <h4 class=\"card-title\">" + user.fact + "</h4>\n          <h4 class=\"card-title\">" + user.gender + "</h4>\n          <h4 class=\"card-title\">" + user.interestedIn + "</h4>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-img=\"" + user.profilePic + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
       } else {
-        $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <button class=\"delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
+        $row.prepend("\n          <div class=\"user-profile user\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <button class=\"delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
       }
     });
     $(".sidebar").html($row);
@@ -375,7 +378,7 @@ $(function () {
   function showEditForm(user) {
     if (event) event.preventDefault();
     console.log(user);
-    $main.html("\n      <h2>Edit User</h2>\n      <form method=\"put\" action=\"/users/" + user._id + "\">\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"firstName\" placeholder=\"Firstname\" value=\"" + user.firstName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"lastName\" placeholder=\"Last Name\" value=\"" + user.lastName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"email\" placeholder=\"Email\" value=\"" + user.email + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"age\" placeholder=\"Age e.g 21\" value=\"" + user.age + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"gender\" placeholder=\"Male or Female?\" value=\"" + user.gender + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"interestedIn\" placeholder=\"Men, Women, or Both?\" value=\"" + user.interestedIn + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"postcode\" placeholder=\"Postcode\" value=\"" + user.postcode + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"fact\" placeholder=\"Tell us a quick fact about yourself!\" value=\"" + user.fact + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"profilePic\" placeholder=\"Image Url\" value=\"" + user.profilePic + "\">\n      </div>\n      <button class=\"btn btn-primary\">Update</button>\n      </form>\n      ");
+    $sidebar.html("\n      <h2>Edit Profile</h2>\n      <form method=\"put\" action=\"/users/" + user._id + "\">\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"firstName\" placeholder=\"Firstname\" value=\"" + user.firstName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"lastName\" placeholder=\"Last Name\" value=\"" + user.lastName + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"email\" placeholder=\"Email\" value=\"" + user.email + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"age\" placeholder=\"Age e.g 21\" value=\"" + user.age + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"gender\" placeholder=\"Male or Female?\" value=\"" + user.gender + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"interestedIn\" placeholder=\"Men, Women, or Both?\" value=\"" + user.interestedIn + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"postcode\" placeholder=\"Postcode\" value=\"" + user.postcode + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"fact\" placeholder=\"Tell us a quick fact about yourself!\" value=\"" + user.fact + "\">\n      </div>\n      <div class=\"form-group\">\n      <input class=\"form-control\" name=\"profilePic\" placeholder=\"Image Url\" value=\"" + user.profilePic + "\">\n      </div>\n      <button class=\"btn btn-primary\">Update</button>\n      </form>\n      ");
   }
 
   function deleteUser() {
@@ -413,11 +416,12 @@ $(function () {
         map: map,
         position: loctn,
 
-        icon: 'images/pinklocationicon.png'
+        icon: 'images/hearticon.png'
       }));
       markers.push(new google.maps.Marker({
         map: map,
-        position: partnerLatLng
+        position: partnerLatLng,
+        icon: 'images/hearticon.png'
       }));
       markers.forEach(function (marker) {
         bounds.extend(marker.getPosition());
@@ -461,7 +465,7 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: "\n        <img src=" + event.largeimageurl + ">\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
+        content: "\n        <img src=" + event.largeimageurl + ">\n        <h2>" + event.eventname + "</h2><br>\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
       });
       _this.infowindow.open(_this.map, marker);
     });

@@ -326,27 +326,26 @@ $(() => {
     });
   }
 
-  // setTimeout(function dropMarker(){
-  //   let marker = new google.maps.Marker({
-  //     position: latLng,
-  //     animation: google.maps.Animation.DROP,
-  //     map
-  //   });
-  // }, 60 * index);
-
   function addEventMarkers(events) {
     events.forEach((event, index) => {
       let latLng =  {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      let marker = new google.maps.Marker({
-        position: latLng,
-        // animation: google.maps.Animation.DROP,
-        map
-      });
-      googleMap.addInfoWindowForEvent(event, marker);
-      eventMarkers.push(marker);
+      setTimeout(function dropMarker(){
+        let marker = new google.maps.Marker({
+          position: latLng,
+          // animation: google.maps.Animation.BOUNCE,
+          map
+        });
+        googleMap.addInfoWindowForEvent(event, marker);
+        eventMarkers.push(marker);
+      }, 70 * index);
+      // let marker = new google.maps.Marker({
+      //   position: latLng,
+      //   map
+      // });
+
     });
   }
 
@@ -578,7 +577,7 @@ $(() => {
         fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
-        radius: 1950
+        radius: 2082
       }));
 
       map.panTo(centerOfBounds);

@@ -256,27 +256,25 @@ $(function () {
     });
   }
 
-  // setTimeout(function dropMarker(){
-  //   let marker = new google.maps.Marker({
-  //     position: latLng,
-  //     animation: google.maps.Animation.DROP,
-  //     map
-  //   });
-  // }, 60 * index);
-
   function addEventMarkers(events) {
     events.forEach(function (event, index) {
       var latLng = {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      var marker = new google.maps.Marker({
-        position: latLng,
-        // animation: google.maps.Animation.DROP,
-        map: map
-      });
-      googleMap.addInfoWindowForEvent(event, marker);
-      eventMarkers.push(marker);
+      setTimeout(function dropMarker() {
+        var marker = new google.maps.Marker({
+          position: latLng,
+          // animation: google.maps.Animation.BOUNCE,
+          map: map
+        });
+        googleMap.addInfoWindowForEvent(event, marker);
+        eventMarkers.push(marker);
+      }, 70 * index);
+      // let marker = new google.maps.Marker({
+      //   position: latLng,
+      //   map
+      // });
     });
   }
 
@@ -450,7 +448,7 @@ $(function () {
         fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
-        radius: 1950
+        radius: 2082
       }));
 
       map.panTo(centerOfBounds);

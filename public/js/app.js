@@ -466,7 +466,7 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: "\n        <img src=" + event.largeimageurl + ">\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
+        content: "\n        <img src=" + event.largeimageurl + " onerror=\"this.src='../images/noimage.jpg'\">\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
       });
       _this.infowindow.open(_this.map, marker);
     });

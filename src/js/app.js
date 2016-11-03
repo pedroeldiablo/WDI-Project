@@ -594,7 +594,7 @@ $(() => {
     }
     this.infowindow = new google.maps.InfoWindow({
       content: `
-        <img src=${event.largeimageurl}>
+        <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
         <h2>${event.description}</h2></br>
         <h2>${event.venue.name}</h2></br>
         <h4>${event.date}</h4>

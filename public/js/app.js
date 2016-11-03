@@ -18,6 +18,9 @@ $(function () {
   $sidebar.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', logout);
+  $('.datePic').on('click', selectNewDate);
+  var markers = [];
+  var circle = [];
 
   var eventCircle = {
     lat: undefined,
@@ -180,10 +183,11 @@ $(function () {
     createEventRadius(partnerLatLng);
     setDatePic(partnerImg);
     removeCover();
+    $('.sidebar').hide();
   }
 
   function setDatePic(partnerImg) {
-    console.log(partnerImg);
+    $('.datePic').show();
     $('.datePic').css('background-image', 'url(' + partnerImg + ')');
     $('.datePic').css('border', '2px solid grey');
   }
@@ -196,13 +200,6 @@ $(function () {
       };
 
       map.panTo(latLng);
-
-      var marker = new google.maps.Marker({
-        position: latLng,
-        animation: google.maps.Animation.DROP,
-        icon: 'https://lh4.ggpht.com/Tr5sntMif9qOPrKV_UVl7K8A_V3xQDgA7Sw_qweLUFlg76d_vGFA7q1xIKZ6IcmeGqg=w300',
-        map: map
-      });
     });
   }
 
@@ -361,7 +358,22 @@ $(function () {
     $(".sidebar").html($row);
   }
 
-  function selectNewDate() {}
+  function selectNewDate() {
+    $('.sidebar').toggle();
+    $('.datePic').hide();
+    dateReset();
+  }
+
+  function dateReset() {
+    removeMarkers();
+    console.log(markers);
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
+    circle[0].setMap(null);
+    circle = [];
+  }
 
   function getUser() {
     var id = $(this).data('id');
@@ -406,7 +418,6 @@ $(function () {
       return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
     };
     var bounds = new google.maps.LatLngBounds();
-    var markers = [];
     navigator.geolocation.getCurrentPosition(function (position) {
       var loctn = {
         lat: position.coords.latitude,
@@ -415,13 +426,14 @@ $(function () {
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
+        icon: '../images/tflmarker.png'
 
-        icon: 'images/hearticon.png'
       }));
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng,
-        icon: 'images/hearticon.png'
+        icon: '../images/tflmarker.png'
+
       }));
       markers.forEach(function (marker) {
         bounds.extend(marker.getPosition());
@@ -430,13 +442,7 @@ $(function () {
       // console.log("centerOfBounds", centerOfBounds);
       // console.log(this.getCenter());
 
-      new google.maps.Marker({
-        map: map,
-        position: centerOfBounds,
-        animation: google.maps.Animation.DROP
-      });
-
-      var circle = new google.maps.Circle({
+      circle.push(new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.65,
         strokeWeight: 2,
@@ -445,8 +451,8 @@ $(function () {
         map: map,
         center: centerOfBounds,
         radius: 1950
+      }));
 
-      });
       map.panTo(centerOfBounds);
 
       console.log(today);
@@ -465,7 +471,7 @@ $(function () {
         _this.infowindow.close();
       }
       _this.infowindow = new google.maps.InfoWindow({
-        content: "\n        <img src=" + event.largeimageurl + ">\n        <h2>" + event.eventname + "</h2><br>\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
+        content: "\n        <img src=" + event.largeimageurl + " onerror=\"this.src='../images/noimage.jpg'\">\n        <h2>" + event.eventname + "</h2><br>\n        <h2>" + event.description + "</h2></br>\n        <h2>" + event.venue.name + "</h2></br>\n        <h4>" + event.date + "</h4>\n        <p>" + event.venue.address + "</p>\n        <p>" + event.venue.town + "</p>\n        <p>" + event.venue.postcode + "</p>\n        <p>" + event.venue.phone + "</p>\n        <button><a href=" + event.link + " target=\"_blank\">Get Tickets</a></button>\n        <p>" + event.entryprice + "</p>\n      "
       });
       _this.infowindow.open(_this.map, marker);
     });

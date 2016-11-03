@@ -16,6 +16,9 @@ $(() => {
   $sidebar.on('click', 'button.dateButton', dateSetup);
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', logout);
+  $('.datePic').on('click', selectNewDate);
+  let markers = [];
+  let circle = [];
 
   let eventCircle = {
     lat: undefined,
@@ -25,6 +28,7 @@ $(() => {
 
   createMap();
   dateSlider();
+
 
   let $mapDiv =$('#map');
   let eventMarkers = [];
@@ -249,10 +253,11 @@ $(() => {
     createEventRadius(partnerLatLng);
     setDatePic(partnerImg);
     removeCover();
+    $('.sidebar').hide();
   }
 
   function setDatePic(partnerImg) {
-    console.log(partnerImg);
+    $('.datePic').show();
     $('.datePic').css('background-image', 'url(' + partnerImg + ')');
     $('.datePic').css('border', '2px solid grey');
   }
@@ -265,13 +270,6 @@ $(() => {
       };
 
       map.panTo(latLng);
-
-      let marker = new google.maps.Marker({
-        position: latLng,
-        animation: google.maps.Animation.DROP,
-        icon: 'https://lh4.ggpht.com/Tr5sntMif9qOPrKV_UVl7K8A_V3xQDgA7Sw_qweLUFlg76d_vGFA7q1xIKZ6IcmeGqg=w300',
-        map
-      });
     });
   }
 
@@ -357,7 +355,6 @@ $(() => {
     $('.mapCover').hide();
     $('.mainBox').hide();
   }
-
 
   function isLoggedIn() {
     return !!localStorage.getItem('token');
@@ -448,14 +445,25 @@ $(() => {
           `
         );
       }
-
-
     });
     $(".sidebar").html($row);
   }
 
   function selectNewDate(){
+    $('.sidebar').toggle();
+    $('.datePic').hide();
+    dateReset();
+  }
 
+  function dateReset() {
+    removeMarkers();
+    console.log(markers);
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+    markers = [];
+    circle[0].setMap(null);
+    circle = [];
   }
 
   function getUser() {
@@ -538,7 +546,6 @@ $(() => {
       return this.getBounds().contains(latLng) && google.maps.geometry.spherical.computeDistanceBetween(this.getCenter(), latLng) <= this.getRadius();
     };
     let bounds = new google.maps.LatLngBounds();
-    let markers = [];
     navigator.geolocation.getCurrentPosition(function(position) {
       let loctn = {
         lat: position.coords.latitude,
@@ -547,13 +554,14 @@ $(() => {
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
+        icon: '../images/tflmarker.png'
 
-        icon: 'images/hearticon.png'
       }));
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng,
-        icon: 'images/hearticon.png'
+        icon: '../images/tflmarker.png'
+
       }));
       markers.forEach((marker) => {
         bounds.extend(marker.getPosition());
@@ -562,13 +570,7 @@ $(() => {
       // console.log("centerOfBounds", centerOfBounds);
       // console.log(this.getCenter());
 
-      new google.maps.Marker({
-        map: map,
-        position: centerOfBounds,
-        animation: google.maps.Animation.DROP
-      });
-
-      let circle = new google.maps.Circle({
+      circle.push(new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.65,
         strokeWeight: 2,
@@ -577,8 +579,8 @@ $(() => {
         map: map,
         center: centerOfBounds,
         radius: 1950
+      }));
 
-      });
       map.panTo(centerOfBounds);
 
       console.log(today);
@@ -597,7 +599,7 @@ $(() => {
     }
     this.infowindow = new google.maps.InfoWindow({
       content: `
-        <img src=${event.largeimageurl}>
+        <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
         <h2>${event.eventname}</h2><br>
         <h2>${event.description}</h2></br>
         <h2>${event.venue.name}</h2></br>

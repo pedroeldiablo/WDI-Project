@@ -7,7 +7,7 @@ $secondbrand: #333;
 }
 
 
-img{ max-width: 100%;}
+img{ width: 100%;}
 
 h1 {
   font-size: 40px;
@@ -22,8 +22,6 @@ body {
   color: $primarybrand;
   font-family: $font-stack;
 }
-
-
 
 .navbar{
   padding: 10px;
@@ -64,13 +62,13 @@ body {
 }
 #map{
   width: 100%;
-  height: calc(100vh - 98px);
+  height: calc(100vh - 110px);
   float: left;
 }
 
 .sidebar{
   width: 30%;
-  height: calc(100vh - 98px);
+  height: calc(100vh - 110px);
   float: left;
   background-color: #333;
   overflow: scroll;
@@ -198,7 +196,9 @@ button {
   text-align: center;
   font-family: $font-stack;
   font-weight: 700;
-
+  &:focus {
+    outline: none;
+  }
 }
 
 .datePic {
@@ -218,6 +218,7 @@ button {
 #slider {
   clear: both;
 }
+
 
 // #slider > div.ui-rangeSlider-label.ui-rangeSlider-rightLabel > div.ui-rangeSlider-label-value
 .ui-rangeSlider-label-value{
@@ -271,6 +272,60 @@ button {
         width: 200px;
         display: inline;
         float: left;
+      }
+    }
+  }
+}
+
+
+
+.eventInfoBox {
+  min-height: 140px;
+  max-height: 160px;
+  min-width: 600px;
+  color: black;
+  position: relative;
+  img {
+    width: 140px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 10px;
+  }
+  .content {
+    display: inline-block;
+    vertical-align: top;
+    width: 500px;
+    h2 {
+      margin-right: 24px;
+      strong {
+        font-weight: bold;
+      }
+    }
+    h3 {
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+    h4 {
+      font-size: 14px;
+    }
+    p {
+      font-size: 11px;
+    }
+    a {
+      position: absolute;
+      bottom: 0;
+      right: 5px;
+      text-decoration: none;
+      color: white;
+      padding: 8px;
+      font-size: 12px;
+      border-radius: 3px;
+      font-family: $font-stack;
+      font-weight: 700;
+      background-color: $primarybrand;
+      &:hover {
+        background-color: lighten($primarybrand, 15%);
+
       }
     }
   }

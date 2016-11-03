@@ -35,7 +35,7 @@ $(() => {
 
   let map = new google.maps.Map($mapDiv[0], {
     center: { lat: 51.5153, lng: -0.0722 },
-    zoom: 12,
+    zoom: 14,
     styles: [
       {
         "elementType": "geometry",
@@ -326,27 +326,26 @@ $(() => {
     });
   }
 
-  // setTimeout(function dropMarker(){
-  //   let marker = new google.maps.Marker({
-  //     position: latLng,
-  //     animation: google.maps.Animation.DROP,
-  //     map
-  //   });
-  // }, 60 * index);
-
   function addEventMarkers(events) {
     events.forEach((event, index) => {
       let latLng =  {
         lat: event.venue.latitude,
         lng: event.venue.longitude
       };
-      let marker = new google.maps.Marker({
-        position: latLng,
-        // animation: google.maps.Animation.DROP,
-        map
-      });
-      googleMap.addInfoWindowForEvent(event, marker);
-      eventMarkers.push(marker);
+      setTimeout(function dropMarker(){
+        let marker = new google.maps.Marker({
+          position: latLng,
+          // animation: google.maps.Animation.BOUNCE,
+          map
+        });
+        googleMap.addInfoWindowForEvent(event, marker);
+        eventMarkers.push(marker);
+      }, 70 * index);
+      // let marker = new google.maps.Marker({
+      //   position: latLng,
+      //   map
+      // });
+
     });
   }
 
@@ -578,7 +577,7 @@ $(() => {
         fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
-        radius: 1950
+        radius: 2110
       }));
 
       map.panTo(centerOfBounds);
@@ -599,17 +598,20 @@ $(() => {
     }
     this.infowindow = new google.maps.InfoWindow({
       content: `
-        <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
-        <h2>${event.eventname}</h2><br>
-        <h2>${event.description}</h2></br>
-        <h2>${event.venue.name}</h2></br>
-        <h4>${event.date}</h4>
-        <p>${event.venue.address}</p>
-        <p>${event.venue.town}</p>
-        <p>${event.venue.postcode}</p>
-        <p>${event.venue.phone}</p>
-        <button><a href=${event.link} target="_blank">Get Tickets</a></button>
-        <p>${event.entryprice}</p>
+        <div class="eventInfoBox">
+          <img src=${event.largeimageurl} onerror="this.src='../images/noimage.jpg'">
+          <div class="content">
+            <h2><strong>${event.eventname}</strong></h2><br>
+            <h4>${event.description}</h4></br>
+            <h3>${event.venue.name}</h3>
+            <p>${event.date}</p>
+            <p>${event.venue.address}</p>
+            <p>${event.venue.town}</p>
+            <p>${event.venue.postcode}</p>
+            <p>${event.venue.phone}</p>
+            <a href=${event.link} target="_blank">Get Tickets</a>
+          </div>
+        </div>
       `
       });
       this.infowindow.open(this.map, marker);

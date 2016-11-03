@@ -356,6 +356,8 @@ $(function () {
     $main.html($row);
   }
 
+  function selectNewDate() {}
+
   function getUser() {
     var id = $(this).data('id');
     var token = localStorage.getItem('token');

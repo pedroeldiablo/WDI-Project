@@ -5,7 +5,10 @@ $(() => {
   let dateBounds = new Date(new Date(today).setMonth(today.getMonth()+1));
   let googleMap = googleMap || {};
   let range = new Date(new Date(today).setDate(today.getDate()+2));
-
+  let eventCircle = {
+    lat: undefined,
+    lng: undefined
+  };
 
   createMap();
   dateSlider();
@@ -262,7 +265,6 @@ $(() => {
         min: today,
         max: range
       }
-
     });
 
     $("#slider").bind("userValuesChanged", function(e, data){
@@ -281,9 +283,7 @@ $(() => {
     eventMarkers = [];
   }
 
-  function getEvents(min, max, centerLat, centerLng) {
-    console.log(centerLat);
-    console.log(centerLng);
+  function getEvents(min, max) {
     removeMarkers();
     let minDate = min.toISOString().split('T')[0];
     let maxDate = max.toISOString().split('T')[0];
@@ -292,8 +292,8 @@ $(() => {
     $.ajax({
       url: `/events`,
       data: {
-        latitude: centerLat,
-        longitude: centerLng,
+        latitude: eventCircle.lat,
+        longitude: eventCircle.lng,
         radius: 1,
         limit: 100,
         minDate: minDate,
@@ -555,10 +555,10 @@ $(() => {
 
       let circle = new google.maps.Circle({
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
+        strokeOpacity: 0.65,
         strokeWeight: 2,
         fillColor: '#FF0000',
-        fillOpacity: 0.35,
+        fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
         radius: 1950
@@ -568,9 +568,9 @@ $(() => {
 
       console.log(today);
       console.log(range);
-      let centerLat = centerOfBounds.lat();
-      let centerLng =  centerOfBounds.lng();
-      getEvents(today, range, centerLat, centerLng);
+      eventCircle.lat = centerOfBounds.lat();
+      eventCircle.lng = centerOfBounds.lng();
+      getEvents(today, range);
 
     });
   }

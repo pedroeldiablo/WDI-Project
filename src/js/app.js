@@ -16,6 +16,10 @@ $(() => {
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', logout);
 
+  let eventCircle = {
+    lat: undefined,
+    lng: undefined
+  };
 
 
   createMap();
@@ -240,7 +244,16 @@ $(() => {
       lat: partnerLat,
       lng: partnerLng
     };
+    let partnerImg = $(this).data('img');
     createEventRadius(partnerLatLng);
+    setDatePic(partnerImg);
+    removeCover();
+  }
+
+  function setDatePic(partnerImg) {
+    console.log(partnerImg);
+    $('.datePic').css('background-image', 'url(' + partnerImg + ')');
+    $('.datePic').css('border', '2px solid grey');
   }
 
   function createMap() {
@@ -271,7 +284,6 @@ $(() => {
         min: today,
         max: range
       }
-
     });
 
     $("#slider").bind("userValuesChanged", function(e, data){
@@ -290,9 +302,7 @@ $(() => {
     eventMarkers = [];
   }
 
-  function getEvents(min, max, centerLat, centerLng) {
-    console.log(centerLat);
-    console.log(centerLng);
+  function getEvents(min, max) {
     removeMarkers();
     let minDate = min.toISOString().split('T')[0];
     let maxDate = max.toISOString().split('T')[0];
@@ -301,8 +311,8 @@ $(() => {
     $.ajax({
       url: `/events`,
       data: {
-        latitude: centerLat,
-        longitude: centerLng,
+        latitude: eventCircle.lat,
+        longitude: eventCircle.lng,
         radius: 1,
         limit: 100,
         minDate: minDate,
@@ -420,7 +430,7 @@ $(() => {
           <h4 class="card-title">${user.fact}</h4>
           <h4 class="card-title">${user.gender}</h4>
           <h4 class="card-title">${user.interestedIn}</h4>
-          <button class="dateButton" data-id="${user._id}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
+          <button class="dateButton" data-id="${user._id}" data-img="${user.profilePic}" data-lat="${user.lat}" data-lng="${user.lng}">Date</button>
           </div>
           `
         );
@@ -439,6 +449,10 @@ $(() => {
 
     });
     $(".sidebar").html($row);
+  }
+
+  function selectNewDate(){
+
   }
 
   function getUser() {
@@ -552,10 +566,10 @@ $(() => {
 
       let circle = new google.maps.Circle({
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
+        strokeOpacity: 0.65,
         strokeWeight: 2,
         fillColor: '#FF0000',
-        fillOpacity: 0.35,
+        fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
         radius: 1950
@@ -565,9 +579,9 @@ $(() => {
 
       console.log(today);
       console.log(range);
-      let centerLat = centerOfBounds.lat();
-      let centerLng =  centerOfBounds.lng();
-      getEvents(today, range, centerLat, centerLng);
+      eventCircle.lat = centerOfBounds.lat();
+      eventCircle.lng = centerOfBounds.lng();
+      getEvents(today, range);
 
     });
   }

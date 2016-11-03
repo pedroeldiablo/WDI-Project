@@ -18,6 +18,11 @@ $(function () {
   $('.usersIndex').on('click', getUsers);
   $('.logOut').on('click', logout);
 
+  var eventCircle = {
+    lat: undefined,
+    lng: undefined
+  };
+
   createMap();
   dateSlider();
 
@@ -170,7 +175,16 @@ $(function () {
       lat: partnerLat,
       lng: partnerLng
     };
+    var partnerImg = $(this).data('img');
     createEventRadius(partnerLatLng);
+    setDatePic(partnerImg);
+    removeCover();
+  }
+
+  function setDatePic(partnerImg) {
+    console.log(partnerImg);
+    $('.datePic').css('background-image', 'url(' + partnerImg + ')');
+    $('.datePic').css('border', '2px solid grey');
   }
 
   function createMap() {
@@ -201,7 +215,6 @@ $(function () {
         min: today,
         max: range
       }
-
     });
 
     $("#slider").bind("userValuesChanged", function (e, data) {
@@ -220,9 +233,7 @@ $(function () {
     eventMarkers = [];
   }
 
-  function getEvents(min, max, centerLat, centerLng) {
-    console.log(centerLat);
-    console.log(centerLng);
+  function getEvents(min, max) {
     removeMarkers();
     var minDate = min.toISOString().split('T')[0];
     var maxDate = max.toISOString().split('T')[0];
@@ -231,8 +242,8 @@ $(function () {
     $.ajax({
       url: "/events",
       data: {
-        latitude: centerLat,
-        longitude: centerLng,
+        latitude: eventCircle.lat,
+        longitude: eventCircle.lng,
         radius: 1,
         limit: 100,
         minDate: minDate,
@@ -339,13 +350,15 @@ $(function () {
     users.forEach(function (user) {
 
       if (user._id !== loggedInUserId) {
-        $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <h4 class=\"card-title\">" + user.age + "</h4>\n          <h4 class=\"card-title\">" + user.fact + "</h4>\n          <h4 class=\"card-title\">" + user.gender + "</h4>\n          <h4 class=\"card-title\">" + user.interestedIn + "</h4>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
+        $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <h4 class=\"card-title\">" + user.age + "</h4>\n          <h4 class=\"card-title\">" + user.fact + "</h4>\n          <h4 class=\"card-title\">" + user.gender + "</h4>\n          <h4 class=\"card-title\">" + user.interestedIn + "</h4>\n          <button class=\"dateButton\" data-id=\"" + user._id + "\" data-img=\"" + user.profilePic + "\" data-lat=\"" + user.lat + "\" data-lng=\"" + user.lng + "\">Date</button>\n          </div>\n          ");
       } else {
         $row.append("\n          <div class=\"user-profile\">\n          <img class=\"card-img-top\" src=\"" + user.profilePic + "\" alt=\"Card image cap\">\n          <h4 class=\"card-title\">" + user.firstName + "</h4>\n          <button class=\"delete\" data-id=\"" + user._id + "\">Delete</button>\n          <button class=\"edit\" data-id=\"" + user._id + "\">Edit</button>\n          </div>\n          ");
       }
     });
     $(".sidebar").html($row);
   }
+
+  function selectNewDate() {}
 
   function getUser() {
     var id = $(this).data('id');
@@ -421,10 +434,10 @@ $(function () {
 
       var circle = new google.maps.Circle({
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
+        strokeOpacity: 0.65,
         strokeWeight: 2,
         fillColor: '#FF0000',
-        fillOpacity: 0.35,
+        fillOpacity: 0.1,
         map: map,
         center: centerOfBounds,
         radius: 1950
@@ -434,9 +447,9 @@ $(function () {
 
       console.log(today);
       console.log(range);
-      var centerLat = centerOfBounds.lat();
-      var centerLng = centerOfBounds.lng();
-      getEvents(today, range, centerLat, centerLng);
+      eventCircle.lat = centerOfBounds.lat();
+      eventCircle.lng = centerOfBounds.lng();
+      getEvents(today, range);
     });
   }
 

@@ -73,7 +73,7 @@ body {
   width: 30%;
   height: calc(100vh - 110px);
   float: left;
-  background-color: #333;
+  background-color: lighten($secondbrand, 50%);
   overflow: scroll;
   padding: 20px;
   position: absolute;
@@ -164,6 +164,14 @@ main {
   // left: calc(50% - 350px);
   opacity: 1;
   z-index: 101;
+  h2{
+    color:lighten($secondbrand, 50%);
+    // font-weight: 700;
+  }
+  h4{
+    color: lighten($secondbrand, 50%);
+    font-weight: 700;
+  }
 }
 
 

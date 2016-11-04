@@ -335,6 +335,7 @@ $(() => {
       setTimeout(function dropMarker(){
         let marker = new google.maps.Marker({
           position: latLng,
+          icon: '../images/pinkmarker.png',
           // animation: google.maps.Animation.BOUNCE,
           map
         });

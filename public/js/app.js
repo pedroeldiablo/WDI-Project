@@ -265,6 +265,7 @@ $(function () {
       setTimeout(function dropMarker() {
         var marker = new google.maps.Marker({
           position: latLng,
+          icon: "../images/greymarker.png",
           // animation: google.maps.Animation.BOUNCE,
           map: map
         });

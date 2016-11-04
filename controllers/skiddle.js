@@ -4,7 +4,7 @@ const eventsIndex = (req, res) => {
     url: "http://www.skiddle.co.uk/api/v1/events/",
     method: "GET",
     qs: {
-      api_key: "19e3e956478924a5391be5b5e37fee57",
+      api_key: process.env.SKIDDLE_KEY,
       latitude: req.query.latitude,
       longitude: req.query.longitude,
       radius: req.query.radius,
@@ -25,5 +25,3 @@ const eventsIndex = (req, res) => {
 module.exports = {
   index: eventsIndex
 };
-
-//process.env.HIUHUIHIUH

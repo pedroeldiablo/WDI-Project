@@ -320,7 +320,9 @@ $(function () {
       if (url === "/login" || url === "/register") {
         toggleNav();
       }
-    }).fail(showLoginForm);
+    }).fail(function () {
+      $('#loginPassword').val('');
+    });
   }
 
   function toggleNav() {

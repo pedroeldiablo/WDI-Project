@@ -391,7 +391,9 @@ $(() => {
       if (url === "/login" || url === "/register"){
         toggleNav();
       }
-    }).fail(showLoginForm);
+    }).fail(() => {
+      $('#loginPassword').val('');
+    });
   }
 
   function toggleNav() {

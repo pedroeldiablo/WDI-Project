@@ -23,9 +23,9 @@
 .ui-rangeSlider-withArrows .ui-rangeSlider-container,
 .ui-rangeSlider-noArrow .ui-rangeSlider-container,
 .ui-rangeSlider-arrow{
-  -webkit-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
-     -moz-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
-          box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
+  // -webkit-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
+  //    -moz-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
+  //         box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
 }
 
 .ui-rangeSlider-disabled.ui-rangeSlider-withArrows .ui-rangeSlider-container,
@@ -65,8 +65,6 @@
 .ui-rangeSlider-arrow,
 .ui-rangeSlider-label{
   background: white;
-  background: -moz-linear-gradient(top, white 0%, #888DA0 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(100%,#888DA0));
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-container,
@@ -83,8 +81,7 @@
 }
 
 .ui-rangeSlider-leftArrow{
-  border-radius:4px 0 0 4px;
-  border-left: solid 1px white;
+  border-left: solid 1px black;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-leftArrow{
@@ -92,8 +89,7 @@
 }
 
 .ui-rangeSlider-rightArrow{
-  border-radius:0 4px 4px 0;
-  border-right: solid 1px white;
+  border-right: solid 1px black;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-rightArrow{
@@ -148,8 +144,8 @@
 }
 
 .ui-rangeSlider-bar{
-	background: $primarybrand;
-  height: 29px;
+	background: rgb(204, 204, 204);
+  height: 25px;
   margin:1px 0;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -157,9 +153,9 @@
 	cursor:grab;
 	cursor: -moz-grab;
 
-	-webkit-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
-     -moz-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
-          box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+	// -webkit-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+  //    -moz-box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
+  //         box-shadow: inset 0 2px 6px RGBA(0,0,0,0.5);
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-bar{
@@ -180,6 +176,7 @@
 .ui-rangeSlider-label{
   padding: 5px 10px;
   bottom:40px;
+  border: 1px solid $primarybrand;
 
   -moz-border-radius: 4px;
        border-radius: 4px;
@@ -188,7 +185,7 @@
      -moz-box-shadow: 0px 1px 0px #c2c5d6;
           box-shadow: 0px 1px 0px #c2c5d6;
 
-  color:white;
+  color: black;
   font-size:15px;
 
   cursor:col-resize;

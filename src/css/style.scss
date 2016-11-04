@@ -120,7 +120,7 @@ body {
   display: block;
   width: 100vw;
   height: calc(100vh - 68px);
-  background-image: url('../images/smiling.png');
+  background-image: url('http://i.imgur.com/Ul4j6Dl.gif');
   background-size: cover;
   color: white;
   position: absolute;
@@ -166,7 +166,9 @@ main {
   z-index: 101;
   h2{
     color:lighten($secondbrand, 50%);
-    // font-weight: 700;
+  }
+  h3{
+      color:lighten($secondbrand, 60%);
   }
   h4{
     color: lighten($secondbrand, 50%);

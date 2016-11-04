@@ -424,13 +424,13 @@ $(function () {
       markers.push(new google.maps.Marker({
         map: map,
         position: loctn,
-        icon: '../images/tflmarker.png'
+        icon: '../images/heartpinsmall.png'
 
       }));
       markers.push(new google.maps.Marker({
         map: map,
         position: partnerLatLng,
-        icon: '../images/tflmarker.png'
+        icon: '../images/heartpinsmall.png'
 
       }));
       markers.forEach(function (marker) {

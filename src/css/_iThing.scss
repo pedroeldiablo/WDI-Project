@@ -39,8 +39,8 @@
 .ui-rangeSlider-noArrow .ui-rangeSlider-container{
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border-left: solid 1px #515862;
-  border-right: solid 1px #515862;
+  border-left: solid 1px white;
+  border-right: solid 1px white;
 }
 
 .ui-rangeSlider-disabled.ui-rangeSlider-noArrow .ui-rangeSlider-container{
@@ -64,9 +64,9 @@
 .ui-rangeSlider-container,
 .ui-rangeSlider-arrow,
 .ui-rangeSlider-label{
-  background: #67707F;
-  background: -moz-linear-gradient(top, #67707F 0%, #888DA0 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#67707F), color-stop(100%,#888DA0));
+  background: white;
+  background: -moz-linear-gradient(top, white 0%, #888DA0 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(100%,#888DA0));
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-container,
@@ -84,7 +84,7 @@
 
 .ui-rangeSlider-leftArrow{
   border-radius:4px 0 0 4px;
-  border-left: solid 1px #515862;
+  border-left: solid 1px white;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-leftArrow{
@@ -93,7 +93,7 @@
 
 .ui-rangeSlider-rightArrow{
   border-radius:0 4px 4px 0;
-  border-right: solid 1px #515862;
+  border-right: solid 1px white;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-rightArrow{
@@ -117,12 +117,12 @@
 }
 
 .ui-rangeSlider-leftArrow:hover .ui-rangeSlider-arrow-inner{
-  border-right:10px solid #b3b6c2;
+  border-right:10px solid $primarybrand;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-leftArrow .ui-rangeSlider-arrow-inner,
 .ui-rangeSlider-disabled .ui-rangeSlider-leftArrow:hover .ui-rangeSlider-arrow-inner{
-  border-right-color: #bbc0cf;
+  border-right-color: $primarybrand;
 }
 
 .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner{
@@ -132,12 +132,12 @@
 }
 
 .ui-rangeSlider-rightArrow:hover .ui-rangeSlider-arrow-inner{
-  border-left:10px solid #b3b6c2;
+  border-left:10px solid $primarybrand;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner,
 .ui-rangeSlider-disabled .ui-rangeSlider-rightArrow:hover .ui-rangeSlider-arrow-inner{
-  border-left-color: #bbc0cf;
+  border-left-color: $primarybrand;
 }
 
 .ui-rangeSlider-innerBar{
@@ -148,7 +148,7 @@
 }
 
 .ui-rangeSlider-bar{
-	background: #68a1d6;
+	background: $primarybrand;
   height: 29px;
   margin:1px 0;
   -moz-border-radius: 4px;
@@ -178,6 +178,7 @@
 }
 
 .ui-rangeSlider-label{
+  z-index: 110px;
   padding: 5px 10px;
   bottom:40px;
 
@@ -204,7 +205,7 @@
   border-right: 10px solid transparent;
 
   margin-left: -10px;
-  border-top: 10px solid #888DA0;
+  border-top: 10px solid $primarybrand;
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-label-inner{

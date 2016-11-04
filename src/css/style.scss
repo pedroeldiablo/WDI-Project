@@ -2,6 +2,9 @@ $font-stack: 'Raleway', sans-serif;
 $primarybrand: #ed0c19;
 $secondbrand: #333;
 
+@import "iThing";
+
+
 * {
   box-sizing: border-box;
 }
@@ -100,6 +103,7 @@ body {
 }
 
 .mainBox {
+  padding: 5px;
   display: block;
   width: 700px;
   height: 60%;
@@ -141,18 +145,20 @@ input {
 }
 
 main {
+  vertical-align: top;
   float: right;
-  padding: 20px;
+  padding: 10px;
 }
 
 .about {
+  // vertical-align: top;
   box-sizing: border-box;
-  padding: 20px;
-  float: right;
+  padding: 10px;
+  float: left;
   display: block;
   width: 70%;
   background-color: white;
-  position: absolute;
+  position: sticky;
   top: 15%;
   border-radius: 10px;
   // left: calc(50% - 350px);
@@ -212,7 +218,7 @@ button {
 }
 
 .datePic:hover {
-  background-image: url('../images/back.jpg') !important;
+  background-image: url('../images/heartpinbackborder.png') !important;
 }
 
 #slider {
@@ -221,39 +227,39 @@ button {
 
 
 // #slider > div.ui-rangeSlider-label.ui-rangeSlider-rightLabel > div.ui-rangeSlider-label-value
-.ui-rangeSlider-label-value{
-  background-color:$primarybrand;
-  font-family: $font-stack;
-}
-
-.ui-rangeSlider-label.ui-rangeSlider-rightLabel{
-  background-color:$primarybrand;
-}
-
-.ui-rangeSlider-innerBar {
-  background-color:lighten($secondbrand, 80%);
-}
-
-.ui-rangeSlider-bar {
-  background-color:$primarybrand;
-}
-
-.ui-rangeSlider-arrow.ui-rangeSlider-leftArrow{
-  background-color:$primarybrand;
-}
-
-.ui-rangeSlider-arrow.ui-rangeSlider-rightArrow{
-  background-color:$primarybrand;
-}
-
-@media only screen and (max-width: 700px) {
-  // .mainBox {
-  //   width:100%;
-  // }
-  .sidebar {
-      width:50%;
-  }
-}
+// .ui-rangeSlider-label-value{
+//   background-color:$primarybrand;
+//   font-family: $font-stack;
+// }
+//
+// .ui-rangeSlider-label.ui-rangeSlider-rightLabel{
+//   background-color:$primarybrand;
+// }
+//
+// .ui-rangeSlider-innerBar {
+//   background-color:lighten($secondbrand, 80%);
+// }
+//
+// .ui-rangeSlider-bar {
+//   background-color:$primarybrand;
+// }
+//
+// .ui-rangeSlider-arrow.ui-rangeSlider-leftArrow{
+//   background-color:$primarybrand;
+// }
+//
+// .ui-rangeSlider-arrow.ui-rangeSlider-rightArrow{
+//   background-color:$primarybrand;
+// }
+//
+// @media only screen and (max-width: 700px) {
+//   // .mainBox {
+//   //   width:100%;
+//   // }
+//   .sidebar {
+//       width:50%;
+//   }
+// }
 
 
 @media only screen and (max-width: 500px) {
